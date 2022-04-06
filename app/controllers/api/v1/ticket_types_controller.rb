@@ -4,8 +4,11 @@ class API::V1::TicketTypesController < APIController
   # GET /api/v1/ticket_types
   def index
     # TODO: uncomment after creating API::V1::EventsController
-    @ticket_types = TicketType.where(event_id: params[:event_id])
-    #@ticket_types = TicketType.all # TODO: Comment
+    if params.has_key?(:event_id)
+      @ticket_types = TicketType.where(event_id: params[:event_id])
+    else 
+      @ticket_types = TicketType.all # TODO: Comment
+    end 
   end
 
   # GET /api/v1/ticket_types/:id
@@ -16,7 +19,7 @@ class API::V1::TicketTypesController < APIController
   # POST /api/v1/ticket_types
   def create
     @ticket_type = TicketType.new(ticket_type_params)
-    @ticket_type.event = Event.find(params[:event_id])
+    @ticket_type.event = Event.find(params[:event_id]) if params.has_key?(:event_id)
 
     if @ticket_type.save
       render :show, status: :created, location: @ticket_type
@@ -48,6 +51,6 @@ class API::V1::TicketTypesController < APIController
 
     # Only allow a list of trusted parameters through.
     def ticket_type_params
-      params.fetch(:ticket_type, {}).permit(:id, :event_id, :name, :ticket_price, :description)
+      params.fetch(:ticket_type, {}).permit(:id, :event_id, :name, :price, :description)
     end
 end

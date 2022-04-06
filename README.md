@@ -108,6 +108,7 @@ This will create the controller, along with views, tests, helpers, etc.
 ## Your Report
 
 * Please provide the link to the postman collection containing test requests for your application here: 
+https://www.getpostman.com/collections/3bfc24257fcfd983df26
 * Describe any other relevant details about your API implementation here: 
 
 ## Grading

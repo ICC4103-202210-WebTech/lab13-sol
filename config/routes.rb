@@ -9,8 +9,9 @@ Rails.application.routes.draw do
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
       resources :events do
-        resources :ticket_types   
+        resources :ticket_types, shallow: true   
       end
+      resources :ticket_types
     end
   end
 
