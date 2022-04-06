@@ -6,6 +6,7 @@
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
 
+=begin
 c1 = Customer.new(first_name: "John", last_name: "Doe", email: "john.doe@example.com", phone: "123123123", address: "222 Yellow Brick Road")
 c2 = Customer.new(first_name: "Phillip", last_name: "Berger", email: "phillip.berger@example.com", phone: "456456456", address: "333 Elm Street")
 
@@ -26,4 +27,4 @@ o1 = Order.create(customer: c1)
 t1 = Ticket.create(ticket_type: tt1, order: o1)
 t1 = Ticket.create(ticket_type: tt2, order: o1)
 t1 = Ticket.create(ticket_type: tt2, order: o1)
-
+=end

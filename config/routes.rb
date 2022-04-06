@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :events
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")
@@ -7,7 +8,9 @@ Rails.application.routes.draw do
 
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
-      resources :ticket_types
+      resources :events do
+        resources :ticket_types   
+      end
     end
   end
 

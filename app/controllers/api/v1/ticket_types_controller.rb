@@ -4,12 +4,13 @@ class API::V1::TicketTypesController < APIController
   # GET /api/v1/ticket_types
   def index
     # TODO: uncomment after creating API::V1::EventsController
-    # @ticket_types = TicketType.where(event_id: params[:event_id])
-    @ticket_types = TicketType.all # TODO: Comment
+    @ticket_types = TicketType.where(event_id: params[:event_id])
+    #@ticket_types = TicketType.all # TODO: Comment
   end
 
   # GET /api/v1/ticket_types/:id
   def show
+  
   end
 
   # POST /api/v1/ticket_types
