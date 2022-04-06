@@ -1,5 +1,4 @@
-# Lab Assignment #6
-**Names:** (write your name(s) here)
+# Solution to Lab Assignment #6
 
 ## Introduction
 
