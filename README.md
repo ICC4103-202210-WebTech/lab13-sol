@@ -1,5 +1,4 @@
-# Lab Assignment #7
-**Names:**
+# Solution to Lab Assignment #7
 
 ## Introduction
 
