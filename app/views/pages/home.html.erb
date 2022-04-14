@@ -1,13 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Welcome to Lab Assignment 7!</title>
-</head>
-<body>
-<h1>Ticket Store</h1>
-<ul>
-  <li> <%=link_to("See ticket types", :ticket_types) %></li>
-</ul>
-</body>
-</html>
+<h4>Upcoming Events</h4>
+
+<table>
+  <thead>
+  <th>N</th>
+  <th>Event</th>
+  <th>Date</th>
+  </thead>
+  <tbody>
+  <% @events.each_with_index do |event, i| %>
+    <tr>
+      <td><%= i+1 %></td>
+      <td><%= event.name %></td>
+      <td><%= event.start_date %></td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>

@@ -13,6 +13,8 @@
 # These inflection rules are supported but not enabled by default:
 ActiveSupport::Inflector.inflections(:en) do |inflect|
   inflect.acronym 'API'
+  inflect.uncountable "shopping_cart"
+  inflect.uncountable "ShoppingCart"
   #   inflect.acronym "RESTful"
 end
 

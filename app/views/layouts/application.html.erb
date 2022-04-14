@@ -1,3 +1,4 @@
+<!-- TODO: Complete this layout with the required semantic tags and partial view -->
 <!DOCTYPE html>
 <html>
   <head>
@@ -11,6 +12,29 @@
   </head>
 
   <body>
-    <%= yield %>
+  <header>
+    <h1><%= link_to "Ticket Shop", root_path %></h1>
+  </header>
+  <nav>
+    <ul id="navbar">
+      <li><%= link_to "Events", events_path %></li>
+      <li><%= link_to "Shopping Cart", shopping_cart_path %></li>
+      <li><%= link_to "Orders", customer_orders_path %></li>
+    </ul>
+  </nav>
+  <div id="container">
+    <aside id="customer_info">
+      <%= render partial: "customers/customer", object: @current_customer %>
+    </aside>
+    <main id="main_content">
+      <%= yield %>
+    </main>
+  </div>
+  <footer>
+    <h4>
+      Contact Information
+    </h4>
+    <p>Contact us at: help@ticketshop.com</p>
+  </footer>
   </body>
 </html>

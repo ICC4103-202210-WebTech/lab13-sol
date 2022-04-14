@@ -1,0 +1,26 @@
+<p id="notice"><%= notice %></p>
+
+<h2>Shopping Cart</h2>
+
+<table>
+  <thead>
+    <th>N</th>
+    <th>Event</th>
+    <th>Date</th>
+    <th>Ticket Type</th>
+    <th>Ticket Price</th>
+  </thead>
+  <tbody>
+    <% @tickets.each_with_index do |ticket, i| %>
+    <tr>
+      <td><%= i+1 %></td>
+      <td><%= ticket.ticket_type.event.name %></td>
+      <td><%= ticket.ticket_type.event.start_date %></td>
+      <td><%= ticket.ticket_type.name %></td>
+      <td><%= ticket.ticket_type.price %></td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+
+<%= link_to 'Home', root_path %>
