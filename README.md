@@ -1,8 +1,9 @@
-# Solution to Lab Assignment #6
+# Lab Assignment #7
+**Names:**
 
 ## Introduction
 
-This sixth lab assignment will be graded and you will be working in pairs, so you can team up with a peer to start working on it. You will continue working on the ticket sales application, now adding controller logic and a RESTful API to manage resources in the application from external parties.
+In this lab assignment you will create a home page for the Ticket Shop, and provide navigation from the home page to different sections of the site. For this, you will need to complete the routes of the application, and define a layout for the site based on HTML and basic CSS. You are allowed to work individually or in pairs.
 
 ## First Steps (Don't rush, read this first!)
 
@@ -26,90 +27,79 @@ rails db:populate_fake_data # This will generate fake events, customers, etc.
 rails s # Run the application with an application server
 ```
 
-Note that the last command will launch an application server that will allow accessing your application from either a web browser (at [http://localhost:3000](http://localhost:3000)), another kind of user agent, or even another application able to consume the RESTful API that your application will implement. 
+Note that the last command will launch an application server that will allow accessing your application from either a web browser (at [http://localhost:3000](http://localhost:3000)).
 
-## Web APIs
+## Pre-requisites
 
-A RESTful API is a web API that defines a set of operations through which it is possible for third parties (other web applications, or client software) to act and work on _resources_ that are managed by your application. RESTful APIs are consumable through the HTTP protocol, and define their operations in a highly structured and predictable manner. Given that a RESTful API is based on the HTTP protocol, clients will issue HTTP requests to your web application to invoke operations. In the application side, this involves configuring routes for resources that are ought to be available from your application to API clients.
+There are a few concepts seen in class (see Slide Deck 7) that you must understand before starting work on this lab assignment:
 
-Read section 2.2 of [this guide](https://edgeguides.rubyonrails.org/routing.html#crud-verbs-and-actions]) in order to understand how a RESTful API can be defined for a resource, based on a set of routes that Ruby on Rails can automatically generate.
+1. You must be acquainted with [HTML 5 basics](https://www.w3schools.com/html/html_basic.asp), including [elements](https://www.w3schools.com/html/html_elements.asp), [attributes](https://www.w3schools.com/html/html_attributes.asp), [semantic elements](https://www.w3schools.com/html/html5_semantic_elements.asp), [headings](https://www.w3schools.com/html/html_headings.asp), [paragraphs](https://www.w3schools.com/html/html_paragraphs.asp), [links](https://www.w3schools.com/html/html_links.asp) (even though you will use Rails helpers to generate them in this assignment), [lists](https://www.w3schools.com/html/html_lists.asp), [tables](https://www.w3schools.com/html/html_tables.asp), and [comments](https://www.w3schools.com/html/html_comments.asp). 
+2. Review slide deck 7, with regard to layouts, templates and partials. Read the [Layouts and Rendering](https://edgeguides.rubyonrails.org/layouts_and_rendering.html) guide to understand this. 
+3. Read about [Embedded RuBy (ERB) here](learnhowtoprogram.com/ruby-and-rails/routing-with-ruby/embedded-ruby) -- just read the introduction and the section titled "Embedded Ruby (ERB) Tutorial". ERB is the template engine used in rails to create views.
+4. Remember how [Path and URL](https://edgeguides.rubyonrails.org/routing.html#path-and-url-helpers) helpers become enabled in Rails when you set up routes for resources.
 
-## Routes and Routing Scopes
+## Test your might
 
-You may recall from lectures that there is a component in RoR, and in many other current web application frameworks, which takes charge of routing client requests to controllers, i.e., the ['Rails Router'](https://edgeguides.rubyonrails.org/routing.html#the-purpose-of-the-rails-router) (henceforth just 'the router'). In RoR applications, the router has a configuration file located at `config/routes.rb`. In this file, you may configure the routes available, which basically consists on specifying directives that map requests by their HTTP methods and URL patterns to controllers and their actions. With Ruby on Rails, routes can be RESTful, or completely arbitrary.
+1. [1 point] Edit the `config/routes.rb` file and define resourceful routes for `event`, `ticket_type`, `ticket`, `order`, and `customer` resources. Make sure you adequately nest resources in your routes, that is, nest tickets within orders, and orders within customers. Use the shallow routing option for tickets and orders. You do not need to nest ticket types to events. It is OK if you want to do it, but you will not use it later on. Make sure that your application only supports show and index routes. You will not use all others in this assignment, i.e., new, edit, destroy, etc.
 
-In addition, is possible to define different routing _scopes_ (you may think of these as route namespaces) in a RoR application, in such a way that you can have differents sets of routes for requests that are intended for a web API versus routes that are meant for a web application. The documentation from Rails Guides gives some clear examples about defining routing scopes. In this very assignment, you will be guided towards creating a routing scope for a web API that permits acting on User, Review and Beer restful resources.
+2. [0.5 point] Using the appropriate rails generator (`scaffold_controller`), add controllers for all of the above-listed resources that do not have a controller in the starter code. Recall that `scaffold_controller` will create default views for RESTful actions automatically. You should delete all files under `app/views` that you will not use, including views for edit, and new actions. Also, you may safely delete `_form.html.erb` partial views that are generated.
 
-## Controller Flavors
+3. Make sure your `config/initializers/inflections.rb` file contains the following code, as you will need it to allow creating a `ShoppingCart` controller (with singular name). If you do not include the code, the controller generator will create a controller with a pluralized name.
 
-Controllers in RoR are classes which generally inherit from one of two different parents; `ActionController::Base` or `ActionController::API`. The former is intended to be used for implementing the functionalities of a traditional web application controller, including generating (rendering) views based on HTML, session management, cookies, etc. The latter can be considered to be a lightweight version that is used for implementing web APIs, which do not require such features. In this lab assignment, we will focus on implementing API controllers. 
+   ```ruby
+   ActiveSupport::Inflector.inflections(:en) do |inflect|
+     inflect.uncountable "shopping_cart"
+     inflect.uncountable "ShoppingCart"
+   end
+   ```
 
-## Who the heck is JSON, anyway?
+4. [1.5 points] Add a controller for a singular resource called `ShoppingCart` (`ShoppingCartController`). Within this controller, only enable the `show` action and the corresponding route in the `config/routes.rb` file -- note that `ShoppingCart`  is a _singular_ resource, not a plural one! The view for the shopping cart will be `show.html.erb`. The `show` view should just contain an HTML heading 2 title with the text `Shopping Cart`. Below, an HTML table must appear with a selection of five random tickets loaded from the database. The table containing the tickets must contain: (1) row number (1-5), (2) the name of the corresponding event, (3) the date and time of the corresponding event, (4) the name of the ticket type, (5) and the ticket price. Hint: First make sure that in `ShoppingCartController::show` contains the necessary query for five random tickets, and assign the result of the query to an atribute variable, e.g., `@tickets`. Then use this attribute in the respective view (`shopping_cart/show.html.erb`) in order to generate the table (use an `each_with_index` ruby loop to generate the table rows, google it if you have not seen how it works!). Here is an example embedded ruby code that will likely be inspiring to you:
 
-Nowadays, use of [JavaScript Object Notation (JSON)](https://en.wikipedia.org/wiki/JSON) has become a _de facto_ standard by which objects and data are serialized in the web. RESTful APIs commonly use JSON as a means for serializing input data for their operations, as well as the objects that these return.
+   ```ruby
+   <ul>
+   <%= [1,2,3].each do |v| %>
+   	<li><%= v %></li>
+   <% end %>
+   </ul>
+   <!-- The above embedded ruby code will render as follows: -->
+   <ul>
+     <li>1</li>
+     <li>2</li>  
+     <li>3</li>
+   </ul>
+   ```
 
-Here you may see [a few examples about JSON](https://www.w3schools.com/js/js_json_syntax.asp) and its syntax rules. It is a lightweight notation, compared to similar technologies in other standards that are used to implement web APIs, such as XML web services.
+5. [2 points] Edit the application layout, located at `app/views/application.html.erb`. You need to add the following HTML 5 structural elements to your layout:
 
-In this lab assignment, you will use JSON to specify parameter objects for a RESTful API, and you will have the API generate a JSON response for the client.
+   * A `<header>` element intended for the top of the layout, contaning the name of your Ticket Shop in heading 1 size text. The text must be linked to the root path of the application, that is, whenever the user clicks on the name of the Ticket Shop, the browser will navigate to the root path. **In this assignment, always use a rails helper to generate links, do not do this by hand**. You may freely name your ticket shop as you wish. 
 
-## Consuming a Web API
+   * A navigation bar below the header (use the `<nav>` element). Within the `<nav>` element define an unordered list (`<ul>` element), with `navbar` `id` containing list items (`<li>` elements) comprising links to `Events`, `Profile` (this should link to `customer#show` with `id` 1), `Shopping Cart` (`shopping_cart#show`), and `Orders` (`orders#index`). We insist, please use rails helpers to generate links to the different sections.
 
-To consume a Web API, the client application needs to talk HTTP, and be able to serialize outgoing objects and data with JSON, as well as parsing incoming objects from the API based on this format. There are different ways in which you can test an API without need to create an actual client application:
+   * Then create a `div` element with `container` `id`. You will place within this div element the next two elements below (`<aside>` and `<main>`):
 
-* Use a command line tool such as cURL. Recall that you used cURL in lab assignment 1. [See here some examples](https://www.baeldung.com/curl-rest).
-* Use a GUI tool such as [Postman](https://www.postman.com). Postman is perhaps the easiest and most convenient tool with which you can easily configure and run calls to a web API. Postman is _not_ included with the course's virtual machine but it can be easily installed manually. You may install it in your host operating system as well if you like.
+   * Create an aside section (use the `<aside>` element) in which a partial view is rendered. Give it  `customer_info` as the `id` attribute. The partial view should display the name of first customer in the database (`Customer.first`). As this partial is instanced by the application layout, it will always render, and will need the user object. Place the partial in `app/customers/_customer.html.erb`.  A good idea is to make the `customer` object always available from the `ApplicationController`class, by using a filter. Add the following filter code to this class:
 
-## Now let's get hands on
+     ```ruby
+     before_action :set_customer
+     
+     private
+     
+     def set_customer:
+       @customer = Customer.first
+     end
+     ```
 
-This part of the assignment is non-graded and it is intended for you to see how a RESTful API is implemented with Rails.
+   * Create a main content section in the layout with the `<main>` element. In this section, place the code to the rails `yield` method that will allow action templates rendering their response.
 
-* Go to `app/controllers/api_controller.rb`. You will see that the `APIController` class inherits from `ActionController::API`. Controllers for RESTful APIs will be based on this class. You will find `ApplicationController` at `app/controllers/application_controller.rb`.
-* Now, open `config/initializers/inflections.rb`. The Inflector transforms words from singular to plural, class names to table names, etc. By default, the inflector will not allow acronyms to work well. For instance the controller class name `APIController` does not work as the inflector expects PascalCase to be used for naming models and controller classes. This is why you will see the following line in the `inflections.rb` file:
-```ruby
-inflect.acronym 'API'
-```
-If we omit this line, code will break, as `APIController` and its derived classes will not work properly.
-* Take a careful look at the `config/routes.rb` file. You will see that the root of the application points to `pages#home`. There is a `PagesController` located at `app/controllers/pages_controller.rb`. It just contains an empty `home` action.  The corresponding view, which is automatically rendered, is placed at `app/views/pages/home.html.erb`. Try opening the [root path on your browser](http://localhost:3000) to test this route.
-* In the `routes.rb` file, you will then see that a special route scope has been defined in order to implement a RESTful API. There is an API scope (`api`), and within it, a scope for version 1 (`v1`) of the API. In addition, there is a declaration specifying that the default response format of the API controllers is in JavaScript Object Notation (JSON) format.
-* Now, open `app/controllers/api/v1` and have a look at `ticket_types_controller.rb` See how the `TicketTypesController` class is defined. Note that the names of the route scopes described above appear as nested namespaces wherein the controller class is defined, i.e., `API::V1::TicketTypesController`.
-* When creating an API, it is a good idea to pick the good practices shown above. That is, create an api route scope in `config/routes.rb`, and within the scope, define nested scopes for subsequent versions of the API that may be developed in future releases of your application. 
-* Controllers for your API need to be created under the `app/controllers/api/v1` folder, such as the `TicketTypesController` defined in `ticket_types_controller.rb`.
-* Other regular application controllers will remain available under `app/controllers`.
-* Go back to the `config/routes.rb` file. You will see that below the nested resourceful route definitions for the API, there is a resourceful route definition in the global scope for `ticket_type`.
-* Now, go to `app/views/api/v1/ticket_types` and see the files in the folder. These files are Jbuilder templates which are used to generate JSON responses by the `API::V1::TicketTypesController`.
-You will see about templates and rendering in a few more classes. Just look at these templates so that you understand how JSON-based resource representations are generated by the API.
-* Then, open your web browser and call the `index` action of the non-api `TicketTypesController`, by opening [http://localhost:3000/ticket_types](http://localhost:3000/ticket_types) -- You will see an HTML representation of the list of ticket types available, rendered by the `index` action of `TicketTypesController`.
-* Now, open in the same browser window the `index` action of the api-based `TicketTypesController`, by opening [http://localhost:3000/api/v1/ticket_types](http://localhost:3000/api/v1/ticket_types) -- 
-You will now see a JSON-based representation of the list of ticket types available, rendered by `API::V1::TicketTypesController`.
-* `TicketType` is specified as a plural resource in `config/routes.rb`, therefore, the RESTful routes [described here](https://guides.rubyonrails.org/routing.html#resource-routing-the-rails-default) will be automatically accessible by a client. 
-* The regular controller is intended to be accessible by a user from the web browser, whereas the API controller is intended to be accessible as a web service from another web application, a mobile application or a rich-client application (Android, iOS, .NET, Java, etc.). The beauty of web technologies is that standard protocols and representations will allow interoperability among different platforms and operating systems, with no additional development effort. 
+   * Finally, add a `<footer> ` element containing a heading 4 text `Contact Information`,  and a paragraph (`<p>` element)  below contaning any fake contact information for your Ticket Shop.
 
-## You can make it
+6. [1 point] Edit the home page at `views/pages/home.html.erb`. Have this home page show a table contaning the five events with the latest dates, loaded from the database. Make sure the table shows the event name and the event date. Hint: First have `PagesController::home` make the necessary query and assign the result to an atribute variable, e.g., `@upcoming_events`. Then use this attribute in order to generate the table.
 
-* Now, add your own `EventsController` to the API. You may add a scaffold controller to your 
-project by running:
-```
-rails g scaffold_controller event
-``` 
-This will create the controller, along with views, tests, helpers, etc.
-* Copy the controller just generated from `app/controllers/events_controller.rb` to `app/controllers/api/v1/events_controller.rb`.
-* Modify the controller in `app/controllers/api/v1/events_controller.rb` so that the `API::V1` scopes are prepended to the class name (make sure that `API::V1` is all in uppercase!).
-* Redefine route scopes, following the current examples in `config/routes.rb` so that `TicketType` is now a plural nested resource of events. This will automatically generate routes for `TicketType` resources nested into `Event` resources. For example, the `api/v1/events/1/ticket_types` path will trigger the `API::V1::TicketTypesController#index` action, which will allow displaying all ticket types that relate to the event with id 1.
-* Now, edit `API::V1::EventsController` and `API::V1::TicketTypesController` to implement the following:
-1. [1 point] A RESTful API route/action that permits obtaining all events available.
-2. [1 point] A RESTful API route/action that permits adding a new event.
-3. [1 point] A RESTful API route/action that permits obtaining a specific event (by id).
-4. [1 point] A RESTful API route/action that permits adding a ticket type to an event (by id).
-5. [1 point] A RESTful API route/action that permits obtaining all ticket types related to an event (by id).
-6. [1 point] Modify the action in (3), so that in the response it renders the event resource containing the ticket type resources that are related. The JSON objects that are generated for the response are based on Jbuilder templates that are available at `app/views/api/v1/events`. Note that the `_event.json.builder` template defines how an event object is serialized in JSON format. It is used to render responses in both in `show` and `index` actions of `API::V1::TicketTypesController`. You will find the [official Jbuilder tutorial here](https://github.com/rails/jbuilder).
-* Use [Postman](https://www.postman.com/downloads/) to debug and try out your API. If you need to install it in Debian, [try this guide](https://www.how2shout.com/linux/2-ways-to-install-postman-on-debian-11-bullseye-or-10-buster/). Create and share a Postman collection containing all requests needed to try out the above 1-6 requirements. Place the link to your collection in this file, in the section below. 
-* Make sure you add, commit and push your changes.
+7. By now, you should be able to run your application and navigate to the different sections from the home page, however, without an aesthetically pleasing layout. 
 
-## Your Report
+8. Add [this CSS template](https://gist.github.com/claudio-alvarez/b3b3c5d67e04ae8fabd138e6a1ad0560) to your application. Place it in the file `app/assets/stylesheets/main.css`. After this, run your application again and experience the difference. We have not covered CSS yet, but you may study the CSS file, along with the CSS tutorial at W3 Schools in order to understand the basics.
 
-* Please provide the link to the postman collection containing test requests for your application here: 
-https://www.getpostman.com/collections/3bfc24257fcfd983df26
-* Describe any other relevant details about your API implementation here: 
+   * If the layout or styles look still broken or poor, it is likely that you did not assign the `id` attributes correctly to the elements in the layout. Go through the substeps in (5) in order to get this right.
 
 ## Grading
 
@@ -123,7 +113,7 @@ Each of the three parts of the assignment will be graded on a scale from 1 to 5.
 
 Then each 1-5 score will translate to 0, 0.25, 0.5, 0.75 and 1.0 weights that will multiply the maximum score possible in the corresponding part of the assignment. The weighted scores will be added up with the base point to calculate the final grade on a scale from 1 to 7.
 
-Please commit and push your code to GitHub until tomorrow (Wednesday 6th) at 23:59.
+Please commit and push your code to GitHub until tomorrow (Wednesday 20th) at 23:59.
 
 ## Active Record reference
 
@@ -178,6 +168,7 @@ rails db:setup
 
 The following links to Rails Guides will provide you useful information for completing your assignment:
 
+* [HTML 5 basics (W3Schools)](https://www.w3schools.com/html/html_basic.asp)
 * [Rails Action Controller Overview](https://edgeguides.rubyonrails.org/action_controller_overview.html) 
 * [Rails Routing from the Outside In](https://edgeguides.rubyonrails.org/routing.html)
 * [Command line](http://edgeguides.rubyonrails.org/command_line.html)
