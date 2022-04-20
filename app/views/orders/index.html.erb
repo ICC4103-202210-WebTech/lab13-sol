@@ -1,16 +1,22 @@
-<p id="notice"><%= notice %></p>
-
-<h2>Orders</h2>
-
-<table>
-  <thead>
+<div class="row ml-0 mt-3">
+  <h2>Orders</h2>
+</div>
+<div class="row ml-0 mt-2">
+  <p>Your past orders are listed below:</p>
+</div>
+<div class="row ml-0">
+  <p id="notice"><%= notice %></p>
+</div>
+<div class="row ml-0">
+  <table class="table">
+    <thead>
     <tr>
-      <th>ID</th>
-      <th>Show</th>
-      <th>Order Date</th>
+      <th scope="col">ID</th>
+      <th scope="col">Show</th>
+      <th scope="col">Order Date</th>
     </tr>
-  </thead>
-  <tbody>
+    </thead>
+    <tbody>
     <% @orders.each do |order| %>
       <tr>
         <td><%= order.id %></td>
@@ -18,7 +24,10 @@
         <td><%= order.created_at %></td>
       </tr>
     <% end %>
-  </tbody>
-</table>
+    </tbody>
+  </table>
+</div>
+<div class="row ml-2 mt-0">
+  <%== pagy_bootstrap_nav(@pagy) %>
+</div>
 
-<br>

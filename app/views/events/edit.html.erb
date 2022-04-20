@@ -1,0 +1,13 @@
+<div class="row ml-0 mt-3">
+  <h2>Edit "<%=@event.name%>" Event</h2>
+</div>
+<div class="row ml-0 mt-2">
+  <p>Please enter the required information to edit the "<%=@event.name%>" event:</p>
+</div>
+<%= render partial: "form",
+           locals: {
+               event: @event,
+               submit_btn_text: "Update",
+               ticket_type_section_title: "Edit event ticket types",
+               ticket_type_instruction_text: "You may edit existing ticket types for your event"
+           } %>

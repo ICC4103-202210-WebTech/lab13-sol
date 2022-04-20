@@ -74,7 +74,7 @@ enables paging features when displaying long tables. You may want to use this in
 ## Get psyched up!
 
 1. [1 point] Edit the home page of the Ticket Shop to present the upcoming events in a format similar to the index view
-of events you inspected according to the indications above. Move the view code at `app/views/events/index.html.erb:12-29` to a new partial view (e.g. `app/views/events/_event_tile.html.erb`), so that you can reuse the event tiles in the home page located at `app/views/pages/home.html.erb`.
+of events you inspected according to the indications above. Move the view code at `app/views/events/index.html.erb:13-29` to a new partial view (e.g. `app/views/events/_event_tile.html.erb`), so that you can reuse the event tiles in the home page located at `app/views/pages/home.html.erb`.
 1. [1 point] Modify `EventsController` so that the parameters required to create or update an event are permitted. That is, complete the call to the `fetch` method in `EventsController#event_params`. 
 2. [0.5 point] Ensure that the form to create new events (i.e., '`/events/new`') works properly and it is possible to save a new event, however, keeping the event venue constant. You may add a constant routing parameter, or a hidden input field to the form at `app/views/events/new.html.erb`.
 3. [1 point] Add a select box allowing to choose the event venue for a new event in the form at `app/views/events/new.html.erb`. The select box must display the names of available event venues, in alphabetical order. 

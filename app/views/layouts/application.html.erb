@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Lab 7</title>
+    <title>Lab 8</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
@@ -10,31 +10,42 @@
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
-
   <body>
-  <header>
-    <h1><%= link_to "Ticket Shop", root_path %></h1>
-  </header>
-  <nav>
-    <ul id="navbar">
-      <li><%= link_to "Events", events_path %></li>
-      <li><%= link_to "Shopping Cart", shopping_cart_path %></li>
-      <li><%= link_to "Orders", customer_orders_path %></li>
-    </ul>
-  </nav>
-  <div id="container">
-    <aside id="customer_info">
-      <%= render partial: "customers/customer", object: @current_customer %>
-    </aside>
-    <main id="main_content">
-      <%= yield %>
-    </main>
-  </div>
-  <footer>
-    <h4>
-      Contact Information
-    </h4>
-    <p>Contact us at: help@ticketshop.com</p>
-  </footer>
-  </body>
+    <header>
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+      <%= link_to "Ticket Shop", root_path, class: "navbar-brand", style: "margin-left:.5em" %>
+      <!--<a class="navbar-brand" href="#">Expand at sm</a>-->
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample03" aria-controls="navbarsExample03" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarsExample03">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item"><%= link_to "Events", events_path, class: "nav-link" %></li>
+          <li class="nav-item"><%= link_to "Shopping Cart", shopping_cart_path, class: "nav-link" %></li>
+          <li class="nav-item"><%= link_to "Orders", customer_orders_path, class: "nav-link" %></li>
+        </ul>
+      </div>
+    </nav>
+    </header>
+    <div class="container-fluid">
+      <div class="row">
+        <aside class="col-sm-2" id="customer_info">
+          <%= render partial: "customers/customer", object: @current_customer %>
+        </aside>
+        <main class="col-sm-10" id="main_content">
+          <%= yield %>
+        </main>
+      </div>
+    </div>
+    <footer class="text-muted">
+      <div class="container">
+        <p class="float-right">
+          <a href="#">Back to top</a>
+        </p>
+        <p>WebTech Lab 8 Starter Code is distributed under the <a href="https://opensource.org/licenses/MIT">MIT license.</a></p>
+        <p>New to Bootstrap? <a href="http://getbootstrap.com/">Visit the homepage</a> or read our <a href="http://getbootstrap.com/docs/4.4.1/getting-started/introduction/">getting started guide</a>.</p>
+        <p>Contact us at: help@ticketshop.com</p>
+      </div>
+    </footer>
+    </body>
 </html>
