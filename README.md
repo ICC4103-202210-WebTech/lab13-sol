@@ -1,10 +1,38 @@
-# Solution to Lab Assignment #7
+# Starter code for Lab Assignment #8
 
 ## Introduction
 
-In this lab assignment you will create a home page for the Ticket Shop, and provide navigation from the home page to different sections of the site. For this, you will need to complete the routes of the application, and define a layout for the site based on HTML and basic CSS. You are allowed to work individually or in pairs.
+In this lab assignment you will apply styling based on the Bootstrap CSS library to the Ticket Shop, and add web forms to create and update one of its models. You may continue to work in pairs.
 
-## First Steps (Don't rush, read this first!)
+#### Pre-requisites
+
+1. You must be acquainted with [Bootstrap 5.1](https://getbootstrap.com/docs/5.1/getting-started/introduction/), including
+layouts (i.e., [container variants](https://getbootstrap.com/docs/5.1/layout/containers/)), the [grid system](https://getbootstrap.com/docs/5.1/layout/grid/), [formatting content](https://getbootstrap.com/docs/5.1/content/reboot/), [basic components](https://getbootstrap.com/docs/5.1/components/accordion/), and [forms](https://getbootstrap.com/docs/5.1/forms/overview/). 
+2. Study web forms in Rails as introduced in slide deck 7.
+
+## About Bootstrap
+
+Bootstrap is a user interface library for web applications, based on CSS and JavaScript. It facilitates creating view layouts and templates, and applying a consistent set of styles to objects in an HTML document.
+
+Use of Bootstrap in a Rails application will generally entail adding the library as a dependency (i.e., from a gem, manually, or by using a Javascript utility), customizing the application layout(s), and applying bootstrap styles to view templates and partials. This same process applies if using any other user interface library, such as [Tailwind CSS](https://tailwindcss.com/) and [Bulma](https://bulma.io/).
+
+After adding Bootstrap to your Rails application, the first step is to edit the application layout to add a [_container_](https://getbootstrap.com/docs/5.1/layout/containers/). Containers are the most basic layout element in Bootstrap and are required when using the default grid system. Containers are used to contain, pad, and (sometimes) center the content within them. While containers can be nested, most layouts do not require a nested container. Within a container, commonly rows will be used to divide spaces vertically, and columns will be inserted within the rows to use space horizontally. A container can introduce "breakpoints", which allow reacommodating content whenever the vieport size changes. This is the way in which a responsive layout; that is, one that responds to viewport dimensions adaptively, and therefore can support different screen sizes and device form factors.
+
+Common in Bootstrap layouts is the use of [navigation bars](https://getbootstrap.com/docs/5.1/components/navbar/). You may add a navigation bar at the top of the layout, to contain common functions, such as site search, and links to sign in, sign up, and sign out operations.
+
+After adding a container to a layout, Rail's view templates can be customized to include Bootstrap styles. For instance, hyperlinks and buttons can be styled according to [button styles](https://getbootstrap.com/docs/5.1/components/buttons/). Also, Bootstrap styles can (and should) be [applied to forms](https://getbootstrap.com/docs/5.1/forms/overview/).
+
+## How to add Bootstrap to a Rails Project
+
+Bootstrap requires a Javascript library called [jQuery](https://jquery.com/), and another Javascript module called [popperjs](https://popper.js.org/) that provides tooltip and popover features. There are several ways in which Javascript libraries are installed in Rails applications as of version 7. In the starter code of this lab assignment, we are using Rails' 7 standard way of including Javascript dependencies, which is based on [import maps](https://www.digitalocean.com/community/tutorials/how-to-dynamically-import-javascript-with-import-maps), a feature where we can load Javascript modules dynamically at runtime. Import maps is a feature supported natively by Chrome and Firefox, and can run in other browsers by means of adapter code (a so-called [shim](https://en.wikipedia.org/wiki/Shim_(computing)#:~:text=In%20computer%20programming%2C%20a%20shim,API%20in%20an%20older%20environment.)).
+
+The starter code of this assignment includes Bootstrap, and we have done so by following the instructions in [this tutorial](https://jasonfleetwoodboldt.com/courses/stepping-up-rails/rails-7-bootstrap/).
+
+## Fancy paging of tables
+
+If you have a look at the `/orders` path of the application, you will see that Bootstrap styles have been added to the tabular display of orders. Also, notice that a gem called [Pagy](https://github.com/ddnexus/pagy) has been added to support paginating model views. You may want to see the Gemfile to check out how it was included. Also, if you have a look at `OrdersController#index`, you will see how pagy is being called to prepare the paginated display of orders. Installation of pagy is quite straightforward according to the [documentation](https://ddnexus.github.io/pagy/how-to#gsc.tab=0). Furthermore, pagy has been configured to utilize bootstrap styles in this project. You may want to see this [guide](https://ddnexus.github.io/pagy/extras/bootstrap#gsc.tab=0) for details.
+
+## Run the First Steps as Usual
 
 The starter code contains a Rails project that implements all of the requirements of the previous lab assignment. You may open the project with VSCode, with RubyMine, or even use a text-based editor like Vim. If you use RVM, it should automatically switch to the proper version of ruby with the 'webtech' gemset (see the files `.ruby-version` and `.ruby-gemset` in the root path of your repository). Should you need to set this manually, run the following command:
 
@@ -28,77 +56,31 @@ rails s # Run the application with an application server
 
 Note that the last command will launch an application server that will allow accessing your application from either a web browser (at [http://localhost:3000](http://localhost:3000)).
 
-## Pre-requisites
+## An ungraded walk in the park
 
-There are a few concepts seen in class (see Slide Deck 7) that you must understand before starting work on this lab assignment:
+1. See the application layout located at `app/views/layouts/application.html.erb`. Study how the navigation bar is
+created in the layout and how the space is distributed among the left aside and the main section of the page, by 
+specifying Bootstrap columns.
+1. Go to the Events section of the Ticket Shop, by clicking on the link at the top navigation bar. Study the file 
+`app/views/events/index.html.erb` in order to see how styles are being applied to different elements displayed on the
+this view. Particularly, have a look at the "event tile" that is rendered per each event.
+2. Click on the "Add Event" button located on the events' index page. This will allow you to see the form available at
+`app/views/events/new.html.erb`.
+3. Now go to the Shopping Cart section of the site and take a look at how the Bootstrap table style is applied.
+4. Lastly, go to the Orders section of the site and have a look at how paging controls have been added beneath the table
+displaying the list of orders. A gem called [https://github.com/ddnexus/pagy](pagy) has been added to the project, which
+enables paging features when displaying long tables. You may want to use this in your project assignments later on.
 
-1. You must be acquainted with [HTML 5 basics](https://www.w3schools.com/html/html_basic.asp), including [elements](https://www.w3schools.com/html/html_elements.asp), [attributes](https://www.w3schools.com/html/html_attributes.asp), [semantic elements](https://www.w3schools.com/html/html5_semantic_elements.asp), [headings](https://www.w3schools.com/html/html_headings.asp), [paragraphs](https://www.w3schools.com/html/html_paragraphs.asp), [links](https://www.w3schools.com/html/html_links.asp) (even though you will use Rails helpers to generate them in this assignment), [lists](https://www.w3schools.com/html/html_lists.asp), [tables](https://www.w3schools.com/html/html_tables.asp), and [comments](https://www.w3schools.com/html/html_comments.asp). 
-2. Review slide deck 7, with regard to layouts, templates and partials. Read the [Layouts and Rendering](https://edgeguides.rubyonrails.org/layouts_and_rendering.html) guide to understand this. 
-3. Read about [Embedded RuBy (ERB) here](learnhowtoprogram.com/ruby-and-rails/routing-with-ruby/embedded-ruby) -- just read the introduction and the section titled "Embedded Ruby (ERB) Tutorial". ERB is the template engine used in rails to create views.
-4. Remember how [Path and URL](https://edgeguides.rubyonrails.org/routing.html#path-and-url-helpers) helpers become enabled in Rails when you set up routes for resources.
+## Get psyched up!
 
-## Test your might
-
-1. [1 point] Edit the `config/routes.rb` file and define resourceful routes for `event`, `ticket_type`, `ticket`, `order`, and `customer` resources. Make sure you adequately nest resources in your routes, that is, nest tickets within orders, and orders within customers. Use the shallow routing option for tickets and orders. You do not need to nest ticket types to events. It is OK if you want to do it, but you will not use it later on. Make sure that your application only supports show and index routes. You will not use all others in this assignment, i.e., new, edit, destroy, etc.
-
-2. [0.5 point] Using the appropriate rails generator (`scaffold_controller`), add controllers for all of the above-listed resources that do not have a controller in the starter code. Recall that `scaffold_controller` will create default views for RESTful actions automatically. You should delete all files under `app/views` that you will not use, including views for edit, and new actions. Also, you may safely delete `_form.html.erb` partial views that are generated.
-
-3. Make sure your `config/initializers/inflections.rb` file contains the following code, as you will need it to allow creating a `ShoppingCart` controller (with singular name). If you do not include the code, the controller generator will create a controller with a pluralized name.
-
-   ```ruby
-   ActiveSupport::Inflector.inflections(:en) do |inflect|
-     inflect.uncountable "shopping_cart"
-     inflect.uncountable "ShoppingCart"
-   end
-   ```
-
-4. [1.5 points] Add a controller for a singular resource called `ShoppingCart` (`ShoppingCartController`). Within this controller, only enable the `show` action and the corresponding route in the `config/routes.rb` file -- note that `ShoppingCart`  is a _singular_ resource, not a plural one! The view for the shopping cart will be `show.html.erb`. The `show` view should just contain an HTML heading 2 title with the text `Shopping Cart`. Below, an HTML table must appear with a selection of five random tickets loaded from the database. The table containing the tickets must contain: (1) row number (1-5), (2) the name of the corresponding event, (3) the date and time of the corresponding event, (4) the name of the ticket type, (5) and the ticket price. Hint: First make sure that in `ShoppingCartController::show` contains the necessary query for five random tickets, and assign the result of the query to an atribute variable, e.g., `@tickets`. Then use this attribute in the respective view (`shopping_cart/show.html.erb`) in order to generate the table (use an `each_with_index` ruby loop to generate the table rows, google it if you have not seen how it works!). Here is an example embedded ruby code that will likely be inspiring to you:
-
-   ```ruby
-   <ul>
-   <%= [1,2,3].each do |v| %>
-   	<li><%= v %></li>
-   <% end %>
-   </ul>
-   <!-- The above embedded ruby code will render as follows: -->
-   <ul>
-     <li>1</li>
-     <li>2</li>  
-     <li>3</li>
-   </ul>
-   ```
-
-5. [2 points] Edit the application layout, located at `app/views/application.html.erb`. You need to add the following HTML 5 structural elements to your layout:
-
-   * A `<header>` element intended for the top of the layout, contaning the name of your Ticket Shop in heading 1 size text. The text must be linked to the root path of the application, that is, whenever the user clicks on the name of the Ticket Shop, the browser will navigate to the root path. **In this assignment, always use a rails helper to generate links, do not do this by hand**. You may freely name your ticket shop as you wish. 
-
-   * A navigation bar below the header (use the `<nav>` element). Within the `<nav>` element define an unordered list (`<ul>` element), with `navbar` `id` containing list items (`<li>` elements) comprising links to `Events`, `Profile` (this should link to `customer#show` with `id` 1), `Shopping Cart` (`shopping_cart#show`), and `Orders` (`orders#index`). We insist, please use rails helpers to generate links to the different sections.
-
-   * Then create a `div` element with `container` `id`. You will place within this div element the next two elements below (`<aside>` and `<main>`):
-
-   * Create an aside section (use the `<aside>` element) in which a partial view is rendered. Give it  `customer_info` as the `id` attribute. The partial view should display the name of first customer in the database (`Customer.first`). As this partial is instanced by the application layout, it will always render, and will need the user object. Place the partial in `app/customers/_customer.html.erb`.  A good idea is to make the `customer` object always available from the `ApplicationController`class, by using a filter. Add the following filter code to this class:
-
-     ```ruby
-     before_action :set_customer
-     
-     private
-     
-     def set_customer:
-       @customer = Customer.first
-     end
-     ```
-
-   * Create a main content section in the layout with the `<main>` element. In this section, place the code to the rails `yield` method that will allow action templates rendering their response.
-
-   * Finally, add a `<footer> ` element containing a heading 4 text `Contact Information`,  and a paragraph (`<p>` element)  below contaning any fake contact information for your Ticket Shop.
-
-6. [1 point] Edit the home page at `views/pages/home.html.erb`. Have this home page show a table contaning the five events with the latest dates, loaded from the database. Make sure the table shows the event name and the event date. Hint: First have `PagesController::home` make the necessary query and assign the result to an atribute variable, e.g., `@upcoming_events`. Then use this attribute in order to generate the table.
-
-7. By now, you should be able to run your application and navigate to the different sections from the home page, however, without an aesthetically pleasing layout. 
-
-8. Add [this CSS template](https://gist.github.com/claudio-alvarez/b3b3c5d67e04ae8fabd138e6a1ad0560) to your application. Place it in the file `app/assets/stylesheets/main.css`. After this, run your application again and experience the difference. We have not covered CSS yet, but you may study the CSS file, along with the CSS tutorial at W3 Schools in order to understand the basics.
-
-   * If the layout or styles look still broken or poor, it is likely that you did not assign the `id` attributes correctly to the elements in the layout. Go through the substeps in (5) in order to get this right.
+1. [1 point] Edit the home page of the Ticket Shop to present the upcoming events in a format similar to the index view
+of events you inspected according to the indications above. Move the view code at `app/views/events/index.html.erb:12-29` to a new partial view (e.g. `app/views/events/_event_tile.html.erb`), so that you can reuse the event tiles in the home page located at `app/views/pages/home.html.erb`.
+1. [1 point] Modify `EventsController` so that the parameters required to create or update an event are permitted. That is, complete the call to the `fetch` method in `EventsController#event_params`. 
+2. [0.5 point] Ensure that the form to create new events (i.e., '`/events/new`') works properly and it is possible to save a new event, however, keeping the event venue constant. You may add a constant routing parameter, or a hidden input field to the form at `app/views/events/new.html.erb`.
+3. [1 point] Add a select box allowing to choose the event venue for a new event in the form at `app/views/events/new.html.erb`. The select box must display the names of available event venues, in alphabetical order. 
+4. [1 point] Add a nested form to `app/views/events/new.html.erb` that allows creating a new event including just one ticket type. Make sure you properly set the `accepts_nested_attributes_for` macro in the `Event` model. 
+5. [0.5 point] Complete the view at `app/views/events/show.html.erb`, showing the information about an event, including the name of the event venue, and a table displaying the available ticket types. Add links (with Bootstrap `btn`,`btn-primary` style) necessary to add a new ticket type to the current event (use the necessary path helper for this), and to open the `edit` page for the current event.
+6. [1 point] Complete the view at `app/views/events/edit.html.erb`, allowing to update an event. You do not need to include a nested form to edit the ticket types.
 
 ## Grading
 
