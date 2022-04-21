@@ -8,6 +8,7 @@ class TicketTypesController < ApplicationController
 
   # GET /ticket_types
   def new
+    @event = Event.find(params[:event_id])
     @ticket_type = TicketType.new
   end
 
@@ -17,7 +18,9 @@ class TicketTypesController < ApplicationController
 
   # POST /ticket_types
   def create
+    @event = Event.find(params[:event_id])
     @ticket_type = TicketType.new(ticket_type_params)
+    @ticket_type.event = @event
 
     respond_to do |format|
       if @ticket_type.save
@@ -59,6 +62,6 @@ class TicketTypesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def ticket_type_params
-      params.fetch(:ticket_type, {})
+      params.fetch(:ticket_type, {}).permit(:name, :price, :event_id)
     end
 end

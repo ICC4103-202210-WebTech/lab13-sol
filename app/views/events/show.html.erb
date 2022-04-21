@@ -1,3 +1,42 @@
-<p id="notice"><%= notice %></p>
-
-<%= link_to 'Back', events_path %>
+<div class="row ml-0 mt-3">
+  <h2>Event: <%=@event.name %></h2>
+</div>
+<div class="row ml-0 mt-3">
+  <ul class="list-unstyled">
+    <li><strong>Description:</strong> <%=@event.description %></li>
+    <li><strong>Date:</strong> <%=@event.start_date %></li>
+    <li><strong>Venue:</strong> <%=@event.event_venue.name %></li>
+    <li><strong>Address:</strong> <%=@event.event_venue.address %></li>
+  </ul>
+</div>
+<div class="row ml-0 mt-2 mb-3">
+  <div class="col-2">
+    <%= link_to "Add Ticket Type", new_event_ticket_type_path(@event), class: ["btn", "btn-primary"] %>
+    &nbsp;
+  </div>
+  <div class="col-2">
+    <%= link_to "Edit Event", edit_event_path, class: ["btn", "btn-primary"] %>
+  </div>
+</div>
+<div class="row ml-0 mt-3">
+  <p><strong>Ticket Types:</strong></p>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Price</th>
+      </tr>
+    </thead>
+    <tbody>
+    <% @event.ticket_types.each do |ticket_type| %>
+      <tr>
+        <td><%= ticket_type.name %></td>
+        <td><%= ticket_type.price %></td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>
+<div class="row ml-0 mt-3">
+  <%= link_to 'Back', events_path %>
+</div>

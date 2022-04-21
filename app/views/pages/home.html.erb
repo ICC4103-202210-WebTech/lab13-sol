@@ -1,18 +1,11 @@
-<h4>Upcoming Events</h4>
-
-<table>
-  <thead>
-  <th>N</th>
-  <th>Event</th>
-  <th>Date</th>
-  </thead>
-  <tbody>
-  <% @events.each_with_index do |event, i| %>
-    <tr>
-      <td><%= i+1 %></td>
-      <td><%= event.name %></td>
-      <td><%= event.start_date %></td>
-    </tr>
+<div class="row ml-0 mt-3">
+  <h2>Upcoming Events</h2>
+</div>
+<div class="row ml-0 mt-2">
+  <p>We have awesome events for you!</p>
+</div>
+<div class="row">
+  <% @events.each do |event| %>
+    <%= render partial: 'events/event_tile', locals: { event: event } %>
   <% end %>
-  </tbody>
-</table>
+</div>

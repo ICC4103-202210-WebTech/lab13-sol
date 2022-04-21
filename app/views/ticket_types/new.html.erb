@@ -1,0 +1,12 @@
+<div class="col-6">
+  <div class="row ml-0 mt-3">
+    <h2>Adding a Ticket Type to "<%= @event.name %>"</h2>
+  </div>
+  <div class="row ml-0 mt-2">
+    <p>Please enter the required information to create a new ticket type for the event:</p>
+  </div>
+  <div class="row ml-0 mt-2">
+  <%= render 'form', locals: { event: @event, ticket_type: @ticket_type } %>
+  </div>
+</div>
+  <%#= link_to 'Back', event_ticket_types_path %>
