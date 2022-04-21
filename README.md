@@ -1,5 +1,7 @@
 # Starter code for Lab Assignment #8
 
+**Names:**
+
 ## Introduction
 
 In this lab assignment you will apply styling based on the Bootstrap CSS library to the Ticket Shop, and add web forms to create and update one of its models. You may continue to work in pairs.
@@ -20,13 +22,13 @@ After adding Bootstrap to your Rails application, the first step is to edit the 
 
 Common in Bootstrap layouts is the use of [navigation bars](https://getbootstrap.com/docs/5.1/components/navbar/). You may add a navigation bar at the top of the layout, to contain common functions, such as site search, and links to sign in, sign up, and sign out operations.
 
-After adding a container to a layout, Rail's view templates can be customized to include Bootstrap styles. For instance, hyperlinks and buttons can be styled according to [button styles](https://getbootstrap.com/docs/5.1/components/buttons/). Also, Bootstrap styles can (and should) be [applied to forms](https://getbootstrap.com/docs/5.1/forms/overview/).
+After adding a container to a layout, Action View templates can be customized to include Bootstrap styles. For instance, hyperlinks and buttons can be styled according to [button styles](https://getbootstrap.com/docs/5.1/components/buttons/). Also, Bootstrap styles can (and should) be [applied to forms](https://getbootstrap.com/docs/5.1/forms/overview/).
 
 ## How to add Bootstrap to a Rails Project
 
 Bootstrap requires a Javascript library called [jQuery](https://jquery.com/), and another Javascript module called [popperjs](https://popper.js.org/) that provides tooltip and popover features. There are several ways in which Javascript libraries are installed in Rails applications as of version 7. In the starter code of this lab assignment, we are using Rails' 7 standard way of including Javascript dependencies, which is based on [import maps](https://www.digitalocean.com/community/tutorials/how-to-dynamically-import-javascript-with-import-maps), a feature where we can load Javascript modules dynamically at runtime. Import maps is a feature supported natively by Chrome and Firefox, and can run in other browsers by means of adapter code (a so-called [shim](https://en.wikipedia.org/wiki/Shim_(computing)#:~:text=In%20computer%20programming%2C%20a%20shim,API%20in%20an%20older%20environment.)).
 
-The starter code of this assignment includes Bootstrap, and we have done so by following the instructions in [this tutorial](https://jasonfleetwoodboldt.com/courses/stepping-up-rails/rails-7-bootstrap/).
+The starter code of this assignment includes Bootstrap, and we have done so by following the instructions in "Option #1" of [this tutorial](https://jasonfleetwoodboldt.com/courses/stepping-up-rails/rails-7-bootstrap/) (find the "Today’s Goal" heading and read on).
 
 ## Fancy paging of tables
 
@@ -68,19 +70,18 @@ this view. Particularly, have a look at the "event tile" that is rendered per ea
 `app/views/events/new.html.erb`.
 3. Now go to the Shopping Cart section of the site and take a look at how the Bootstrap table style is applied.
 4. Lastly, go to the Orders section of the site and have a look at how paging controls have been added beneath the table
-displaying the list of orders. A gem called [https://github.com/ddnexus/pagy](pagy) has been added to the project, which
+displaying the list of orders. A gem called [pagy](https://github.com/ddnexus/pagy) has been added to the project, which
 enables paging features when displaying long tables. You may want to use this in your project assignments later on.
 
 ## Get psyched up!
 
 1. [1 point] Edit the home page of the Ticket Shop to present the upcoming events in a format similar to the index view
 of events you inspected according to the indications above. Move the view code at `app/views/events/index.html.erb:13-29` to a new partial view (e.g. `app/views/events/_event_tile.html.erb`), so that you can reuse the event tiles in the home page located at `app/views/pages/home.html.erb`.
-1. [1 point] Modify `EventsController` so that the parameters required to create or update an event are permitted. That is, complete the call to the `fetch` method in `EventsController#event_params`. 
-2. [0.5 point] Ensure that the form to create new events (i.e., '`/events/new`') works properly and it is possible to save a new event, however, keeping the event venue constant. You may add a constant routing parameter, or a hidden input field to the form at `app/views/events/new.html.erb`.
-3. [1 point] Add a select box allowing to choose the event venue for a new event in the form at `app/views/events/new.html.erb`. The select box must display the names of available event venues, in alphabetical order. 
-4. [1 point] Add a nested form to `app/views/events/new.html.erb` that allows creating a new event including just one ticket type. Make sure you properly set the `accepts_nested_attributes_for` macro in the `Event` model. 
-5. [0.5 point] Complete the view at `app/views/events/show.html.erb`, showing the information about an event, including the name of the event venue, and a table displaying the available ticket types. Add links (with Bootstrap `btn`,`btn-primary` style) necessary to add a new ticket type to the current event (use the necessary path helper for this), and to open the `edit` page for the current event.
-6. [1 point] Complete the view at `app/views/events/edit.html.erb`, allowing to update an event. You do not need to include a nested form to edit the ticket types.
+2. [1 point] Modify `EventsController` so that the parameters required to create or update an event are permitted. That is, complete the call to the `fetch` method in `EventsController#event_params`. 
+3. [1 point] Ensure that the form to create new events (i.e., '`/events/new`') works properly and it is possible to save a new event, however, keeping the event venue constant. You may add a constant routing parameter, or a hidden input field to the form at `app/views/events/new.html.erb`.
+4. [1 point] Add a select box allowing to choose the event venue for a new event in the form at `app/views/events/new.html.erb`. The select box must display the names of available event venues, in alphabetical order. For this, take a look at `app/views/events/_form.html.erb`, which is used in `app/views/events/edit.html.erb`.
+5. [1 point] Add a nested form to `app/views/events/new.html.erb` that allows creating a new event including just one ticket type. Make sure you properly set the `accepts_nested_attributes_for` macro in the `Event` model. You may see `app/views/events/_form.html.erb` for inspiration on how to accomplish this.
+6. [1 point] Complete the view at `app/views/events/show.html.erb`, showing the information about an event, including the name of the event venue, and a table displaying the available ticket types. Add links (with Bootstrap `btn`,`btn-primary` style) necessary to add a new ticket type to the current event (use the necessary path helper for this), and to open the `edit` page for the current event.
 
 ## Grading
 
@@ -150,6 +151,8 @@ rails db:setup
 The following links to Rails Guides will provide you useful information for completing your assignment:
 
 * [HTML 5 basics (W3Schools)](https://www.w3schools.com/html/html_basic.asp)
+* [Layouts and Rendering in Rails](https://edgeguides.rubyonrails.org/layouts_and_rendering.html)
+* [Action View Helpers](https://edgeguides.rubyonrails.org/form_helpers.html) 
 * [Rails Action Controller Overview](https://edgeguides.rubyonrails.org/action_controller_overview.html) 
 * [Rails Routing from the Outside In](https://edgeguides.rubyonrails.org/routing.html)
 * [Command line](http://edgeguides.rubyonrails.org/command_line.html)
