@@ -4,7 +4,7 @@
 
 ## Introduction
 
-In this lab assignment you will apply styling based on the Bootstrap CSS library to the Ticket Shop, and add web forms to create and update one of its models. You may continue to work in pairs.
+In this lab assignment you will apply styling based on the Bootstrap CSS library to the Ticket Shop, create and use a partial view, and complete a web form to create events. You may continue to work in pairs.
 
 #### Pre-requisites
 
