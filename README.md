@@ -6,57 +6,11 @@
 
 In this lab assignment you will add a working shopping cart to the Ticket Shop using a cookie, and add an image attachment to the `Event` model. You may continue to work in pairs.
 
-#### Pre-requisites
+## Pre-requisites
 
 1. Study web forms in Rails as introduced in class 7, and further explained at the beginning of class 8.
 2. Study about the use of session, cookies and the flash as described in class 8.
 3. Study how to use Active Storage, as described in class 8 and in the Rails Guides.
-
-## About Bootstrap
-
-Bootstrap is a user interface library for web applications, based on CSS and JavaScript. It facilitates creating view layouts and templates, and applying a consistent set of styles to objects in an HTML document.
-
-Use of Bootstrap in a Rails application will generally entail adding the library as a dependency (i.e., from a gem, manually, or by using a Javascript utility), customizing the application layout(s), and applying bootstrap styles to view templates and partials. This same process applies if using any other user interface library, such as [Tailwind CSS](https://tailwindcss.com/) and [Bulma](https://bulma.io/).
-
-After adding Bootstrap to your Rails application, the first step is to edit the application layout to add a [_container_](https://getbootstrap.com/docs/5.1/layout/containers/). Containers are the most basic layout element in Bootstrap and are required when using the default grid system. Containers are used to contain, pad, and (sometimes) center the content within them. While containers can be nested, most layouts do not require a nested container. Within a container, commonly rows will be used to divide spaces vertically, and columns will be inserted within the rows to use space horizontally. A container can introduce "breakpoints", which allow reacommodating content whenever the vieport size changes. This is the way in which a responsive layout; that is, one that responds to viewport dimensions adaptively, and therefore can support different screen sizes and device form factors.
-
-Common in Bootstrap layouts is the use of [navigation bars](https://getbootstrap.com/docs/5.1/components/navbar/). You may add a navigation bar at the top of the layout, to contain common functions, such as site search, and links to sign in, sign up, and sign out operations.
-
-After adding a container to a layout, Action View templates can be customized to include Bootstrap styles. For instance, hyperlinks and buttons can be styled according to [button styles](https://getbootstrap.com/docs/5.1/components/buttons/). Also, Bootstrap styles can (and should) be [applied to forms](https://getbootstrap.com/docs/5.1/forms/overview/).
-
-## How to add Bootstrap to a Rails Project
-
-Bootstrap requires a Javascript library called [jQuery](https://jquery.com/), and another Javascript module called [popperjs](https://popper.js.org/) that provides tooltip and popover features. There are several ways in which Javascript libraries are installed in Rails applications as of version 7. In the starter code of this lab assignment, we are using Rails' 7 standard way of including Javascript dependencies, which is based on [import maps](https://www.digitalocean.com/community/tutorials/how-to-dynamically-import-javascript-with-import-maps), a feature where we can load Javascript modules dynamically at runtime. Import maps is a feature supported natively by Chrome and Firefox, and can run in other browsers by means of adapter code (a so-called [shim](https://en.wikipedia.org/wiki/Shim_(computing)#:~:text=In%20computer%20programming%2C%20a%20shim,API%20in%20an%20older%20environment.)).
-
-The starter code of this assignment includes Bootstrap, and we have done so by following the instructions in "Option #1" of [this tutorial](https://jasonfleetwoodboldt.com/courses/stepping-up-rails/rails-7-bootstrap/) (find the "Today’s Goal" heading and read on).
-
-## Fancy paging of tables
-
-If you have a look at the `/orders` path of the application, you will see that Bootstrap styles have been added to the tabular display of orders. Also, notice that a gem called [Pagy](https://github.com/ddnexus/pagy) has been added to support paginating model views. You may want to see the Gemfile to check out how it was included. Also, if you have a look at `OrdersController#index`, you will see how pagy is being called to prepare the paginated display of orders. Installation of pagy is quite straightforward according to the [documentation](https://ddnexus.github.io/pagy/how-to#gsc.tab=0). Furthermore, pagy has been configured to utilize bootstrap styles in this project. You may want to see this [guide](https://ddnexus.github.io/pagy/extras/bootstrap#gsc.tab=0) for details.
-
-## Run the First Steps as Usual
-
-The starter code contains a Rails project that implements all of the requirements of the previous lab assignment. You may open the project with VSCode, with RubyMine, or even use a text-based editor like Vim. If you use RVM, it should automatically switch to the proper version of ruby with the 'webtech' gemset (see the files `.ruby-version` and `.ruby-gemset` in the root path of your repository). Should you need to set this manually, run the following command:
-
-```sh
-rvm use 3@webtech # this will work on the course's VM
-````
-
-As in past assignments, if you take a look at the `db` directory, you will find there are two files:
-
-* `schema.rb`: This file is automatically created by Rails when migrations are run. The file contains all DDL operations needed to initialize the database schema according to migrations.
-* `seeds.rb`: It contains Ruby code that performs initialization in the database. You will see that a series of beers are created in the database.
-
-In addition to the above, in this assignment the database will be automatically populated with fake models for you to write Active Record queries against. For this to work, follow these steps:
-
-```sh
-bundle install # new gems have been added to the Gemfile
-rails db:setup
-rails db:populate_fake_data # This will generate fake events, customers, etc.
-rails s # Run the application with an application server
-```
-
-Note that the last command will launch an application server that will allow accessing your application from either a web browser (at [http://localhost:3000](http://localhost:3000)).
 
 ## Another ungraded walk in the park
 
