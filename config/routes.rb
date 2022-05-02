@@ -12,5 +12,9 @@ Rails.application.routes.draw do
       resources :tickets, only: [:show, :index], shallow: true
     end
   end
-
+  resource :shopping_cart, only: [:show]
+  post 'shopping_cart/add/:ticket_type_id', to: "shopping_cart#add"
+  post 'shopping_cart/remove/:ticket_type_id', to: "shopping_cart#remove"
+  match 'shopping_cart/zap', to: "shopping_cart#zap", via: [:post, :get]
+  
 end

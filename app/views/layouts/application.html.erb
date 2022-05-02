@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Lab 8</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Lab 9</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
@@ -13,37 +12,70 @@
     <header>
       <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
         <div class="container-fluid">
-          <%= link_to "Ticket Shop", root_path, class: "navbar-brand", style: "margin-left:.5em" %>
+          <%= link_to "Ticket Shop", root_path, class: "navbar-brand", style:
+          "margin-left:.5em" %>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav me-auto mb-2 mb-md-0">
-              <li class="nav-item"><%= link_to "Events", events_path, class: "nav-link" %></li>
-              <li class="nav-item"><%= link_to "Shopping Cart", "#", class: "nav-link" %></li>
-              <li class="nav-item"><%= link_to "Orders", customer_orders_path, class: "nav-link" %></li>
+              <li class="nav-item">
+                <%= link_to "Events", events_path, class: "nav-link" %>
+              </li>
+              <li class="nav-item">
+                <%= link_to "Shopping Cart", "#", class: "nav-link" %>
+              </li>
+              <li class="nav-item">
+                <%= link_to "Orders", customer_orders_path, class: "nav-link" %>
+              </li>
             </ul>
+            <span class="d-inline card p-1 shopping_cart">
+              <%= content_tag :a, { href: shopping_cart_path } do %> <%=image_tag("cart.svg", width: "24em") %> <% unless cart_item_count == 0%>
+                <span class="badge badge-danger"><%= cart_item_count %></span>
+              <% end %>
+            <% end %>
+          </span>
+        </div>
+      </div>
+    </nav>
+  </header>
+  <!-- The .container-fluid class provides a full width container, spanning the entire width of the viewport -->
+  <main class="container-fluid" style="margin-top: 4em">
+    <div class="row">
+      <aside class="col-sm-2" id="customer_info">
+        <%= render partial: "customers/customer", object: @current_customer %>
+      </aside>
+      <div class="col-sm-10" id="main_content">
+        <% if notice.present? %>
+          <div class="row ml-0 mt-3" role="alert">
+            <div id="notice" class="alert alert-success">
+              <%= notice %>
+            </div>
           </div>
-        </div>
-      </nav>
-    </header>
-    <!-- The .container-fluid class provides a full width container, spanning the entire width of the viewport -->
-    <main class="container-fluid" style="margin-top: 4em">
-      <div class="row">
-        <aside class="col-sm-2" id="customer_info">
-          <%= render partial: "customers/customer", object: @current_customer %>
-        </aside>
-        <div class="col-sm-10" id="main_content">
-          <%= yield %>
-        </div>
+        <% end %>
+        <% if alert.present? %>
+          <div class="row ml-0 mt-3" role="alert">
+            <div id="alert" class="alert alert-danger">
+              <%= alert %>
+            </div>
+          </div>
+        <% end %>
+        <%= yield %>
       </div>
-    </main>
-    <footer class="container-fluid text-muted">
-      <div class="row mt-4">
-        <p>WebTech Lab 8 Starter Code is distributed under the <a href="https://opensource.org/licenses/MIT">MIT license.</a><br>
-        New to Bootstrap? <a href="http://getbootstrap.com/">Visit the homepage</a> or read our <a href="http://getbootstrap.com/docs/5.1/getting-started/introduction/">getting started guide</a>.<br>
-        Contact us at: help@ticketshop.com</p>
-      </div>
-    </footer>
-  </body>
+    </div>
+  </main>
+  <footer class="container-fluid text-muted">
+    <div class="row mt-4">
+      <p>
+        WebTech Lab 9 Starter Code is distributed under the
+        <a href="https://opensource.org/licenses/MIT">MIT license.</a><br />
+         New to Bootstrap?
+        <a href="http://getbootstrap.com/">Visit the homepage</a> or read our
+        <a href="http://getbootstrap.com/docs/5.1/getting-started/introduction/">getting started guide</a
+          >.<br />
+        Contact us at: help@ticketshop.com
+      </p>
+    </div>
+  </footer>
+</body>
 </html>

@@ -1,16 +1,16 @@
-# Starter code for Lab Assignment #8
+# Starter code for Lab Assignment #9
 
 **Names:**
 
 ## Introduction
 
-In this lab assignment you will apply styling based on the Bootstrap CSS library to the Ticket Shop, create and use a partial view, and complete a web form to create events. You may continue to work in pairs.
+In this lab assignment you will add a working shopping cart to the Ticket Shop using a cookie, and add an image attachment to the `Event` model. You may continue to work in pairs.
 
 #### Pre-requisites
 
-1. You must be acquainted with [Bootstrap 5.1](https://getbootstrap.com/docs/5.1/getting-started/introduction/), including
-layouts (i.e., [container variants](https://getbootstrap.com/docs/5.1/layout/containers/)), the [grid system](https://getbootstrap.com/docs/5.1/layout/grid/), [formatting content](https://getbootstrap.com/docs/5.1/content/reboot/), [basic components](https://getbootstrap.com/docs/5.1/components/accordion/), and [forms](https://getbootstrap.com/docs/5.1/forms/overview/). 
-2. Study web forms in Rails as introduced in slide deck 7.
+1. Study web forms in Rails as introduced in class 7, and further explained at the beginning of class 8.
+2. Study about the use of session, cookies and the flash as described in class 8.
+3. Study how to use Active Storage, as described in class 8 and in the Rails Guides.
 
 ## About Bootstrap
 
@@ -58,30 +58,77 @@ rails s # Run the application with an application server
 
 Note that the last command will launch an application server that will allow accessing your application from either a web browser (at [http://localhost:3000](http://localhost:3000)).
 
-## An ungraded walk in the park
+## Another ungraded walk in the park
 
-1. See the application layout located at `app/views/layouts/application.html.erb`. Study how the navigation bar is
-created in the layout and how the space is distributed among the left aside and the main section of the page, by 
-specifying Bootstrap columns.
-1. Go to the Events section of the Ticket Shop, by clicking on the link at the top navigation bar. Study the file 
-`app/views/events/index.html.erb` in order to see how styles are being applied to different elements displayed on the
-this view. Particularly, have a look at the "event tile" that is rendered per each event.
-2. Click on the "Add Event" button located on the events' index page. This will allow you to see the form available at
-`app/views/events/new.html.erb`.
-3. Now go to the Shopping Cart section of the site and take a look at how the Bootstrap table style is applied.
-4. Lastly, go to the Orders section of the site and have a look at how paging controls have been added beneath the table
-displaying the list of orders. A gem called [pagy](https://github.com/ddnexus/pagy) has been added to the project, which
-enables paging features when displaying long tables. You may want to use this in your project assignments later on.
+1. See the routes for the application located at `config/routes.rb`. You will notice that non-restful routes have
+been added to implement a shopping cart. The `add` route will allow adding an item (ticket) to the shopping cart,
+while the `remove` action is intended to remove a ticket from the shopping cart. There is a third action called `zap`
+which is intended for you to use for debugging purposes. Call it with GET or POST and it will delete shopping cart 
+contents. 
+2. See `app/controllers/shopping_cart_controller.rb` and look at the corresponding `add`, `remove` and `zap`
+actions. In addition, you will see in the private section of the controller `update_cart` and `get_cart_items` methods, 
+that will serialize/deserialize shopping cart state to/from a cookie. Cookie entries only store strings, therefore,
+in order to store a hash in a cookie, some form of serialization is needed allowing to store the data as a plain
+string. In this case, it was chosen to serialize data as JSON. There are two functions provided by the JSON module for 
+this: `parse`, which will take a string an return an object (a hash), and `generate`, which takes a hash and returns a 
+string with its serialization. 
+3. The `ShoppingCartController#show` action is intended to generate an array containing entries that are necessary
+for rendering a view (i.e., the view in `app/views/shopping_cart/show.html.erb`) listing the shopping cart's contents. 
+The view contains a table. The header row of the table will allow you to notice the information you will need to gather 
+in the `@items` and `@total` variables in `ShoppingCartController#show` in order to display in each row of the table.
+4. There is a helper function in `app/helpers/application_helper.rb` called `cart_item_count` that allows obtaining the 
+number of items currently in the shopping cart, which is invoked in the application layout:
+5. See the application layout located at `app/views/layouts/application.html.erb`. See the placeholders
+for the shopping cart, as well as for displaying `notice` and `alert` messages.
+6. In order to support images in `Event` records, Active Storage has been already configured for use in the application.
+You may see the related configuration in `config/environments/development.rb` and `config/storage.yml`.
+7. See the partial at `views/events/_form.html.erb`. This partial is shared by the new and edit views of events, and
+provides a form through which is possible to enter/edit event information as well as information for the first
+ticket type for the event, through nested fields. Validation has been enabled for this form, i.e., attempt 
+to leave fields empty or enter invalid data in them and see the error messages that appear when submitting the form.
+8. See the view at `views/events/show.html.erb`. Notice that in the table that displays the available ticket types, an
+`Add to Cart` button is added to each entry. Look at the parameters with which `link_to` is being called.
 
-## Get psyched up!
+## Test your might!
 
-1. [1 point] Edit the home page of the Ticket Shop to present the upcoming events in a format similar to the index view
-of events you inspected according to the indications above. Move the view code at `app/views/events/index.html.erb:13-29` to a new partial view (e.g. `app/views/events/_event_tile.html.erb`), so that you can reuse the event tiles in the home page located at `app/views/pages/home.html.erb`.
-2. [1 point] Modify `EventsController` so that the parameters required to create or update an event are permitted. That is, complete the call to the `fetch` method in `EventsController#event_params`. 
-3. [1 point] Ensure that the form to create new events (i.e., '`/events/new`') works properly and it is possible to save a new event, however, keeping the event venue constant. You may add a constant routing parameter, or a hidden input field to the form at `app/views/events/new.html.erb`.
-4. [1 point] Add a select box allowing to choose the event venue for a new event in the form at `app/views/events/new.html.erb`. The select box must display the names of available event venues, in alphabetical order. For this, take a look at `app/views/events/_form.html.erb`, which is used in `app/views/events/edit.html.erb`.
-5. [1 point] Add a nested form to `app/views/events/new.html.erb` that allows creating a new event including just one ticket type. Make sure you properly set the `accepts_nested_attributes_for` macro in the `Event` model. You may see `app/views/events/_form.html.erb` for inspiration on how to accomplish this.
-6. [1 point] Complete the view at `app/views/events/show.html.erb`, showing the information about an event, including the name of the event venue, and a table displaying the available ticket types. Add links (with Bootstrap `btn`,`btn-primary` style) necessary to add a new ticket type to the current event (use the necessary path helper for this), and to open the `edit` page for the current event.
+1. [1 point] Modify the `Event` model so that it allows attaching a file. Name the corresponding field `flyer`.
+Modify `EventsController` so that the `flyer` parameter is allowed when creating or updating an `Event` record. Finally,
+add a form label and file field to the form partial at `views/events/_form.html.erb`, in order to upload a flyer image. 
+Style the fields with appropriate Bootstrap styles.
+2. [0.5 point] Modify the partial located at `views/events/_event_tile.html.erb`, so that if the `Event` model has a `flyer` 
+attached the corresponding image is displayed instead of the generic placeholder `thumbnail.svg`. Otherwise, just have 
+the tile display the generic placeholder. Hint: use the `attached?` method in order to check whether the `Event` model 
+has a `flyer` file attached or not. The flyer image should not be larger than 400 pixels wide when displayed, i.e., 
+when displaying a flyer generate an image variant 400px wide in order to fulfill this.
+3. [0.5 point] Modify the view at `views/events/show.html.erb` so that it shows the event below the heading. The image
+should be displayed 400px wide. When the user clicks on the image, have a Bootstrap modal window open displaying the 
+image 800px wide. For an example on this, take a look at the 
+[large modal](https://getbootstrap.com/docs/5.1/components/modal/) example (see "Optional Sizes" section). 
+3. [1 point] Complete the `ShoppingCartController#add` action allowing to add a ticket to the shopping cart. For this, consider
+that tickets are stored in the shopping cart by means of a hash. The keys are the ids of the `TicketType`s chosen, while
+the values are the amount of each `TicketType`. So, when adding a ticket to the shopping cart you will need to either
+add a new entry initialized with value 1, in case it is the first ticket that has been added of the given `TicketType`,
+or increase the count, in case there was already an entry for the required `TicketType`. You should handle
+errors that may occur. For this, it is recommended to use exception handling in your action (`begin-rescue`). If the 
+action fails for any reason, you should put an appropriate `alert` message in the flash, and redirect the user to the 
+referrer, that is, use the `redirect_back` method, passing the `fallback_location: root_path` parameter in case the 
+referrer cannot be resolved. In case it is possible to add the ticket to the cart, put a `notice` message
+in the flash, telling the user that the ticket could be added. 
+4. [1 point] Complete the `ShoppingCartController#remove` action which must remove a ticket from the shopping cart. For this, you
+need to find the matching `TicketType` entry in the hash stored in the shopping cart, and decrease the count. As in the
+`add` action, you need to handle exceptions that may occur. Give the user an error message and avoid the application 
+crashing!
+5. [1 point] Complete the `ShoppingCartController#show` action so that it displays the shopping cart contents in its table. Note
+that the table must show the total amount of tickets being purchased, as well as the total order price. As described
+before, you will need to complete `ShoppingCartController#show` so that the `@items` list and `@total` attributes 
+contain the data that is necessary to display the view. 
+6. [1 point] Each entry listed in the table at `ShoppingCartController#show` should provide a button that allows removing one 
+ticket at a time. For this, you may use a standard button, or try a [FontAwesome](https://fontawesome.com/) icon. 
+FontAwesome is a is a font and icon toolkit that has been 
+[installed in the project](https://medium.com/swlh/integrate-bootstrap-4-and-font-awesome-5-in-rails-6-fec52ee51753) and
+is widely used in web applications. When count of any TicketType reaches zero in the shopping cart, the table entry
+displayed in `ShoppingCartController#show` must disappear. Use the `notice` flash variable in order to notify the user
+that a ticket has been removed.
 
 ## Grading
 

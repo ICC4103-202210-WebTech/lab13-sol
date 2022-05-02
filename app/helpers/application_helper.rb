@@ -18,5 +18,18 @@ module ApplicationHelper
         end)
       end
     end
-  end  
+  end
+
+  def cart_item_count
+    if cookies.has_key?(:shopping_cart)
+      cart_contents = JSON.parse(cookies[:shopping_cart])
+      num_items = 0
+      cart_contents.each_key do |k|
+        num_items += cart_contents[k]
+      end
+      return num_items
+    end
+    return 0
+  end
+
 end
