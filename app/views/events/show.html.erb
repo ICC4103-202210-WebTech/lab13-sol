@@ -48,7 +48,7 @@
                         <%= ticket_type.price %>
                     </td>
                     <td>
-                        <%= link_to "Add to Cart", { controller: "shopping_cart", action: "add", ticket_type_id: ticket_type.id }, method: :post, class: ["btn", "btn-primary"] %>
+                        <%= button_to "Add to Cart", { controller: "shopping_cart", action: "add", ticket_type_id: ticket_type.id }, method: :post, class: ["btn", "btn-primary"] %>
                     </td>
                 </tr>
                 <% end %>

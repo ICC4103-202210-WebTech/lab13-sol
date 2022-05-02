@@ -79,7 +79,7 @@ contain the data that is necessary to display the view.
 6. [1 point] Each entry listed in the table at `ShoppingCartController#show` should provide a button that allows removing one 
 ticket at a time. For this, you may use a standard button, or try a [FontAwesome](https://fontawesome.com/) icon. 
 FontAwesome is a is a font and icon toolkit that has been 
-[installed in the project](https://medium.com/swlh/integrate-bootstrap-4-and-font-awesome-5-in-rails-6-fec52ee51753) and
+[installed in the project](https://stackoverflow.com/questions/71430573/can-font-awesome-be-used-with-importmaps-in-rails-7) and
 is widely used in web applications. When count of any TicketType reaches zero in the shopping cart, the table entry
 displayed in `ShoppingCartController#show` must disappear. Use the `notice` flash variable in order to notify the user
 that a ticket has been removed.
