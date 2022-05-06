@@ -1,32 +1,44 @@
 <div class="row ml-0 mt-3">
-    <h2>Shopping cart</h2>
+  <h2>Shopping cart</h2>
 </div>
 <div class="row ml-0 mt-2">
-    <p>The current order contains the following tickets:</p>
+  <p>The current order contains the following tickets:</p>
 </div>
 <div class="row ml-0">
-    <p id="notice">
-        <%= notice %>
-    </p>
-    <table class="table">
-        <thead>
-            <th scope="col">Event</th>
-            <th scope="col">Ticket Type</th>
-            <th scope="col">Amount</th>
-            <th scope="col">Total price</th>
-            <th scope="col">Actions</th>
-        </thead>
-        <tbody>
-            <tr>
-                <td colspan="2"><strong>Grand Total</strong></td>
-                <!-- Replace item count and total price with their actual values -->
-                <td>[Item count]</td>
-                <td>[Total price]</td>
-                <td>&nbsp;</td>
-            </tr>
-        </tbody>
-    </table>
-    <p>
-        <%= link_to 'Home', root_path %>
-    </p>
+  <p id="notice">
+    <%= notice %>
+  </p>
+  <table class="table">
+    <thead>
+      <th scope="col">Event</th>
+      <th scope="col">Ticket Type</th>
+      <th scope="col">Amount</th>
+      <th scope="col">Total price</th>
+      <th scope="col">Actions</th>
+    </thead>
+    <tbody>
+      <% @items.each do |item| %>
+        <tr>
+          <td><%= link_to item[:ticket_type].event.name, item[:ticket_type].event %></td>
+          <td><%= item[:ticket_type].name %></td>
+          <td><%= item[:amount] %></td>
+          <td><%= item[:total_price] %></td>
+          <td>
+            <%= link_to "shopping_cart/remove/#{item[:ticket_type].id}", method: :post do %>
+              <p><i class="fas fa-minus-square fa-lg"></i></p>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+      <tr>
+        <td colspan="2"><strong>Grand Total</strong></td>
+        <td><%= cart_item_count %></td>
+        <td><%= @total %></td>
+        <td>&nbsp;</td>
+      </tr>
+    </tbody>
+  </table>
+  <p>
+    <%= link_to 'Home', root_path %>
+  </p>
 </div>

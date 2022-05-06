@@ -18,6 +18,10 @@
         <%= form.label :event_venue, class: "form-label" %>
         <%= form.collection_select(:event_venue_id, EventVenue.all.order(name: :asc), :id, :name, {}, { class: "form-control" }) %>
       </div>
+      <div class="mb-3">
+        <%= form.label :flyer %>
+        <%= form.file_field :flyer, class: "form-control-file" %>
+      </div>      
       <div class="card">
         <div class="card-body">
           <h5 class="card-title"><%= ticket_type_section_title %></h5>

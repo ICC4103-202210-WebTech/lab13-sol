@@ -14,7 +14,7 @@ Rails.application.routes.draw do
   end
   resource :shopping_cart, only: [:show]
   post 'shopping_cart/add/:ticket_type_id', to: "shopping_cart#add"
-  post 'shopping_cart/remove/:ticket_type_id', to: "shopping_cart#remove"
+  match 'shopping_cart/remove/:ticket_type_id', to: "shopping_cart#remove", via: [:post, :get]
   match 'shopping_cart/zap', to: "shopping_cart#zap", via: [:post, :get]
   
 end

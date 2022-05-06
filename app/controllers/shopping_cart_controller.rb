@@ -4,24 +4,78 @@ class ShoppingCartController < ApplicationController
   def show
     @items = []
     @total = 0
+    begin
+      contents = get_cart_items
 
-    # The following Will simply redirect to the referer,
-    # or to the root path as fallback location.
-    # redirect_back(fallback_location: root_path)
+      # Traverse keys (ticket type IDs)
+      contents.each_key do |k|
+        # Amount of tickets per ticket type
+        tt = TicketType.includes(:event).find(k)
+        amount = contents[k]
+        @items << { ticket_type: tt, amount: amount, total_price: amount*tt.price }
+        @total += amount*tt.price
+      end
+    rescue => e
+      # Log the error and redirect back to the referer
+      logger.error("[ShoppingCartController#show] Unable to display shopping cart items.\nClass:#{e.class}\nError:#{e.message}\nBacktrace: #{e.backtrace.join('\n')}")
+      flash[:alert] = "Failed to display shopping cart items"
+      redirect_back(fallback_location: root_path)
+    end
   end
 
   def add
-    # Puts a message in the flash
-    flash[:alert] = "Could not add ticket to the shopping cart!"
+    begin
+      contents = get_cart_items
 
-    # Will simply redirect to the referer, or to
-    # the root path as fallback location.
-    redirect_back(fallback_location: root_path)
+      # Attempt to find the required ticket type
+      ttid = params[:ticket_type_id]
+      TicketType.find(ttid)
+
+      # If no tickets of the given type have been added
+      unless contents.has_key?(ttid)
+        # Add the first one
+        contents[ttid] = 1
+      else
+        # Otherwise, increment the ticket count
+        contents[ttid] += 1
+      end
+
+      update_cart(contents)
+
+      # Always redirect back to the referer
+      flash[:notice] = "Ticket added to the shopping cart!"
+      redirect_back(fallback_location: root_path)
+    rescue
+      # Log the error and redirect back to the referer
+      logger.error("[ShoppingCartController#add] Unable to add item to shopping cart")
+      flash[:alert] = "Failed to add an item to the shopping cart"
+      redirect_back(fallback_location: root_path)
+    end
   end
 
   def remove
-    flash[:alert] = "Could not remove ticket from the shopping cart!"
-    redirect_back(fallback_location: root_path)
+    begin
+      contents = get_cart_items
+      ttid = params[:ticket_type_id]
+
+      unless contents.has_key?(ttid)
+        raise Exception("[ShoppingCartController#show] Unable to remove item from shopping cart")
+      end
+
+      contents[ttid] -= 1
+      if contents[ttid] == 0
+        contents.delete(ttid)
+      end
+
+      update_cart(contents)
+
+      flash[:notice] = "Item removed"
+      redirect_back(fallback_location: root_path)
+
+    rescue
+      flash[:alert] = "Failed to remove ticket from the shopping cart"
+      redirect_back(fallback_location: root_path)
+    end
   end
 
   def zap

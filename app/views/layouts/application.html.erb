@@ -26,10 +26,15 @@
                 <%= link_to "Orders", customer_orders_path, class: "nav-link" %>
               </li>
             </ul>
-            <span class="d-inline card p-1 shopping_cart">
-              <%= content_tag :a, { href: shopping_cart_path } do %> <%=image_tag("cart.svg", width: "24em") %> <% unless cart_item_count == 0%>
-                <span class="badge badge-danger"><%= cart_item_count %></span>
+            <span class="d-inline card p-1 shopping_cart" style="background:#efefef;">
+              <%= content_tag :a, { href: shopping_cart_path } do %> <%=image_tag("cart.svg", width: "24em") %> 
+              <span class="badge badge-danger" style="color:black;">
+              <% unless cart_item_count == 0%>
+                <%= cart_item_count %>
+              <% else %>
+                &nbsp;
               <% end %>
+              </span>
             <% end %>
           </span>
         </div>

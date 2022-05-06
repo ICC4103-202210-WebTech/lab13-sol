@@ -1,6 +1,4 @@
-# Starter code for Lab Assignment #9
-
-**Names:**
+# Solution to Lab Assignment #9
 
 ## Introduction
 

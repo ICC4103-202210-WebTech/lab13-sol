@@ -4,6 +4,9 @@
     </h2>
 </div>
 <div class="row ml-0 mt-3">
+  <h2><%= image_tag(@event.flyer.attached? ? @event.flyer.variant(resize_to_limit: [400, 300]) : "thumbnail.svg", width: "400px", data: { bs_toggle: "modal", bs_target: "#viewFlyer" }) %></h2>
+</div>
+<div class="row ml-0 mt-3">
     <ul class="list-unstyled">
         <li><strong>Description:</strong>
             <%=@event.description %>
@@ -57,4 +60,20 @@
 </div>
 <div class="row ml-0 mt-3">
     <%= link_to 'Back', events_path %>
+</div>
+<div class="modal" id="viewFlyer" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><%= @event.name %></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <%= image_tag @event.flyer.attached? ? @event.flyer : "thumbnail.svg", width: "100%" %>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
 </div>
