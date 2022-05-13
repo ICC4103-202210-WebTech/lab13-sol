@@ -17,7 +17,7 @@
         });
     }
 
-    // Run when the plus button is clicked on the Event-TicketType new/edit subform.
+    // Called when the plus button is clicked on the Event-TicketType new/edit subform.
     let add_ticket_type_form = (div_id) => {
         let timestamp = (new Date()).getTime();
 
