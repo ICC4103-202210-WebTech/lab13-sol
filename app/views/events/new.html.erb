@@ -4,43 +4,13 @@
 <div class="row ml-0 mt-2">
   <div class="col-6">
     <p>Please enter the required information to create a new Event:</p>
-    <%= form_with model: @event do |form| %>
-      <div class="mb-3">
-        <%= form.label :name, class: "form-label" %>
-        <%= form.text_field :name, class: "form-control" %>
-      </div>
-      <div class="mb-3">
-      <%= form.label :description, class: "form-label" %>
-      <%= form.text_area :description, class: "form-control" %>
-      </div>
-      <div class="mb-3">
-      <%= form.label :start_date, class: "form-label" %>
-      <%= form.datetime_local_field :start_date, class: "form-control" %>
-      </div>
-      <div class="mb-3">
-        <%= form.label :event_venue, class: "form-label" %>
-        <%= form.collection_select(:event_venue_id, EventVenue.all.order(name: :asc), :id, :name, {}, { class: "form-control" }) %>
-      </div>
-      <div class="card mb-3">
-        <div class="card-body">
-          <h5 class="card-title">Create a Ticket Type</h5>
-          <p>Add the details necessary to create a new ticket type:</p>
-            <%=form.fields_for :ticket_types do |ticket_types_form| %>
-              <div class="mb-3">
-                <%= ticket_types_form.label :name, class: "form-label" %>
-                <%= ticket_types_form.text_field :name, class: "form-control" %>
-              </div>
-              <div class="mb-3">
-                <%= ticket_types_form.label :price, class: "form-label" %>
-                <%= ticket_types_form.text_field :price, class: "form-control" %>
-              </div>
-            <% end %>
-        </div>
-      </div>
-      <div class="mb-3">
-        <%= form.submit "Create", class: ["btn", "btn-primary"] %>
-        <%= link_to "Back", :back, class: ["btn", "btn-secondary"] %>
-      </div>
-    <% end %>
   </div>
 </div>
+<%= render partial: "form",
+           locals: {
+               event: @event,
+               submit_btn_text: "Create",
+               ticket_type_section_title: "Add a ticket type",
+               ticket_type_instruction_text: "You need to add a ticket type to your newly created event"
+    } %>
+

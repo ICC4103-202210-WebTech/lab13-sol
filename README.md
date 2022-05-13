@@ -1,90 +1,36 @@
-# Solution to Lab Assignment #9
+# Starter code for Lab Assignment #10
 
 ## Introduction
 
-In this lab assignment you will add a working shopping cart to the Ticket Shop using a cookie, and add an image attachment to the `Event` model. You may continue to work in pairs.
+In this lab you will use the HTML DOM API and JavaScript to implement a few interactive user interface features for the Ticket Shop application. You will improve the event creation/edition form to support adding multiple ticket types on the fly. Also, you will add buttons to sort events that are displayed on event views, by name and start date. 
+
+You may continue to work in pairs.
 
 ## Pre-requisites
 
-1. Study web forms in Rails as introduced in class 7, and further explained at the beginning of class 8.
-2. Study about the use of session, cookies and the flash as described in class 8.
-3. Study how to use Active Storage, as described in class 8 and in the Rails Guides.
+To get started, you will need to be familiar with the following topics covered in slide decks 9 and 10:
 
-## Another ungraded walk in the park
+1. The HTML DOM, and its APIs, such as events, and traversal (e.g. `querySelector`, `querySelectorAll`, etc.).
+2. The basics of ECMAScript (ES6), including function expressions, IIFEs, the console.
+3. Data attributes in HTML 5. For this, you can see the first few slides of class 10, wherein this is explained.
 
-1. See the routes for the application located at `config/routes.rb`. You will notice that non-restful routes have
-been added to implement a shopping cart. The `add` route will allow adding an item (ticket) to the shopping cart,
-while the `remove` action is intended to remove a ticket from the shopping cart. There is a third action called `zap`
-which is intended for you to use for debugging purposes. Call it with GET or POST and it will delete shopping cart 
-contents. 
-2. See `app/controllers/shopping_cart_controller.rb` and look at the corresponding `add`, `remove` and `zap`
-actions. In addition, you will see in the private section of the controller `update_cart` and `get_cart_items` methods, 
-that will serialize/deserialize shopping cart state to/from a cookie. Cookie entries only store strings, therefore,
-in order to store a hash in a cookie, some form of serialization is needed allowing to store the data as a plain
-string. In this case, it was chosen to serialize data as JSON. There are two functions provided by the JSON module for 
-this: `parse`, which will take a string an return an object (a hash), and `generate`, which takes a hash and returns a 
-string with its serialization. 
-3. The `ShoppingCartController#show` action is intended to generate an array containing entries that are necessary
-for rendering a view (i.e., the view in `app/views/shopping_cart/show.html.erb`) listing the shopping cart's contents. 
-The view contains a table. The header row of the table will allow you to notice the information you will need to gather 
-in the `@items` and `@total` variables in `ShoppingCartController#show` in order to display in each row of the table.
-4. There is a helper function in `app/helpers/application_helper.rb` called `cart_item_count` that allows obtaining the 
-number of items currently in the shopping cart, which is invoked in the application layout:
-5. See the application layout located at `app/views/layouts/application.html.erb`. See the placeholders
-for the shopping cart, as well as for displaying `notice` and `alert` messages.
-6. In order to support images in `Event` records, Active Storage has been already configured for use in the application.
-You may see the related configuration in `config/environments/development.rb` and `config/storage.yml`.
-7. See the partial at `views/events/_form.html.erb`. This partial is shared by the new and edit views of events, and
-provides a form through which is possible to enter/edit event information as well as information for the first
-ticket type for the event, through nested fields. Validation has been enabled for this form, i.e., attempt 
-to leave fields empty or enter invalid data in them and see the error messages that appear when submitting the form.
-8. See the view at `views/events/show.html.erb`. Notice that in the table that displays the available ticket types, an
-`Add to Cart` button is added to each entry. Look at the parameters with which `link_to` is being called.
+## Non-graded Steps
 
-## Test your might!
+1. Inspect the partial views in `app/views/events`. The display of events has been reorganized into different partial views. The `_event_list` partial contains events being displayed. It is composed of the `_event_sort_controls` partial and the `_event_tile` partial. The former contains buttons that will permit the user ordering events by name, or by start date, in ascending order.
+2. See the `app/javascript` directory. As the name implies, JavaScript files used with application views are kept in this directory. There are some standard files that are auto-generated by Rails, like `application.js`, and a folder called `controllers`, with scripts that can be used in views, based on a frontend framework called [Stimulus](https://dev.to/bhumi/stimulus-rails-7-tutorial-5a6a) that is part of Rails 7. In this In our lab we will *not* be using Stimulus. Rather, you will be writing JavaScript that will directly intervenes views using the DOM API. Therefore, there is a directory called `app/javascripts/custom`, which contains a single script called `events.js`, which will contain all the code you will need to develop in this lab.
+3. To use custom JavaScript files, like `events.js`, you need to edit `config/inportmap.rb`, and add a `pin` or `pin_all_from` function call. This has already been configured for the `app/javascript/custom` directory. Also, in `app/javascript/application.js`, an import of the `app/javascript/custom/events.js` file has been added.
+4. In the `app/javascript/custom/events.js` file, you'll find an Immediately-Invoked Function Expression (IIFE) that defines various functions, and adds a handler to the document's `turbo:load` event. The `turbo:load` event is fired in the web browser every time an application view is loaded. In that event handler, you can access the entire DOM of the currently loaded page, and search for elements using functions like `querySelector`, and add event handlers to them.
+5. Go to `events#new`. You will see that in the form there is an "Add Ticket Type" button that, when pressed, dynamically creates a new form and adds it to the parent form.
 
-1. [1 point] Modify the `Event` model so that it allows attaching a file. Name the corresponding field `flyer`.
-Modify `EventsController` so that the `flyer` parameter is allowed when creating or updating an `Event` record. Finally,
-add a form label and file field to the form partial at `views/events/_form.html.erb`, in order to upload a flyer image. 
-Style the fields with appropriate Bootstrap styles.
-2. [0.5 point] Modify the partial located at `views/events/_event_tile.html.erb`, so that if the `Event` model has a `flyer` 
-attached the corresponding image is displayed instead of the generic placeholder `thumbnail.svg`. Otherwise, just have 
-the tile display the generic placeholder. Hint: use the `attached?` method in order to check whether the `Event` model 
-has a `flyer` file attached or not. The flyer image should not be larger than 400 pixels wide when displayed, i.e., 
-when displaying a flyer generate an image variant 400px wide in order to fulfill this.
-3. [0.5 point] Modify the view at `views/events/show.html.erb` so that it shows the event below the heading. The image
-should be displayed 400px wide. When the user clicks on the image, have a Bootstrap modal window open displaying the 
-image 800px wide. For an example on this, take a look at the 
-[large modal](https://getbootstrap.com/docs/5.1/components/modal/) example (see "Optional Sizes" section). 
-3. [1 point] Complete the `ShoppingCartController#add` action allowing to add a ticket to the shopping cart. For this, consider
-that tickets are stored in the shopping cart by means of a hash. The keys are the ids of the `TicketType`s chosen, while
-the values are the amount of each `TicketType`. So, when adding a ticket to the shopping cart you will need to either
-add a new entry initialized with value 1, in case it is the first ticket that has been added of the given `TicketType`,
-or increase the count, in case there was already an entry for the required `TicketType`. You should handle
-errors that may occur. For this, it is recommended to use exception handling in your action (`begin-rescue`). If the 
-action fails for any reason, you should put an appropriate `alert` message in the flash, and redirect the user to the 
-referrer, that is, use the `redirect_back` method, passing the `fallback_location: root_path` parameter in case the 
-referrer cannot be resolved. In case it is possible to add the ticket to the cart, put a `notice` message
-in the flash, telling the user that the ticket could be added. 
-4. [1 point] Complete the `ShoppingCartController#remove` action which must remove a ticket from the shopping cart. For this, you
-need to find the matching `TicketType` entry in the hash stored in the shopping cart, and decrease the count. As in the
-`add` action, you need to handle exceptions that may occur. Give the user an error message and avoid the application 
-crashing!
-5. [1 point] Complete the `ShoppingCartController#show` action so that it displays the shopping cart contents in its table. Note
-that the table must show the total amount of tickets being purchased, as well as the total order price. As described
-before, you will need to complete `ShoppingCartController#show` so that the `@items` list and `@total` attributes 
-contain the data that is necessary to display the view. 
-6. [1 point] Each entry listed in the table at `ShoppingCartController#show` should provide a button that allows removing one 
-ticket at a time. For this, you may use a standard button, or try a [FontAwesome](https://fontawesome.com/) icon. 
-FontAwesome is a is a font and icon toolkit that has been 
-[installed in the project](https://stackoverflow.com/questions/71430573/can-font-awesome-be-used-with-importmaps-in-rails-7) and
-is widely used in web applications. When count of any TicketType reaches zero in the shopping cart, the table entry
-displayed in `ShoppingCartController#show` must disappear. Use the `notice` flash variable in order to notify the user
-that a ticket has been removed.
+## Let's roll
+
+1. [1.0 points] Edit the partial `app/views/events/_event_tile.html.erb`, so that the first (i.e., topmost) `<div>` element contains two data attributes. The first data attribute must be called `data-event-name` and its value must be the event name. The second data attribute must be called `data-start-date`, and its value must be, of course, the event start date.
+2. [2.0 points] Go to `app/javascript/custom/events.js` and complete the code according to the requirements of GOAL (1) in the code comments.  Note that the function `registerClickHandlerForSortButton` permits configuring the sort buttons passing a comparison function. Two comparison functions are available; `cmpFnStartDate` (compares start date) and `cmpFnEventName` (compares event name). Test your code by clicking on the buttons that allow ordering events in the application homepage and `events#index` views. Watch the browser console for any errors. Use the `console` object to print out your debug comments.
+4. [3.0 points] Complete the code in `app/javascript/packs/events.js` according to GOAL (2) in the code comments. You should look for all buttons with class `remove-ticket-type-btn-otf` and add a click event handler to them. The event handler should look for the closest ancestor `div` element with class `remove-ticket-type-btn-otf` and [remove it from the DOM](https://developer.mozilla.org/en-US/docs/Web/API/Element/remove)
 
 ## Grading
 
-Each of the three parts of the assignment will be graded on a scale from 1 to 5. The criteria for each score is as follows:
+Each of the four parts of the assignment will be graded on a scale from 1 to 5. The criteria for each score is as follows:
 
 * Not implemented.
 * Some very basic implementation is attempted, or the implementation is fundamentally flawed.
@@ -93,8 +39,6 @@ Each of the three parts of the assignment will be graded on a scale from 1 to 5.
 * The implementation is complete and correct.
 
 Then each 1-5 score will translate to 0, 0.25, 0.5, 0.75 and 1.0 weights that will multiply the maximum score possible in the corresponding part of the assignment. The weighted scores will be added up with the base point to calculate the final grade on a scale from 1 to 7.
-
-Please commit and push your code to GitHub until tomorrow (Wednesday 20th) at 23:59.
 
 ## Active Record reference
 

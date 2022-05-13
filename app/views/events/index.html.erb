@@ -9,8 +9,4 @@
     <%= link_to "Add Event", new_event_path, class: ["btn", "btn-primary"] %>
   </div>
 </div>
-<div class="row">
-  <% @events.each do |event| %>
-   <%= render partial: 'event_tile', locals: { event: event } %>
-  <% end %>
-</div>
+<%= render partial: 'events/event_list', locals: { events: @events } %>

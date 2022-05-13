@@ -1,0 +1,10 @@
+<div class="row ml-1 mb-2">
+  <div class="col-2">
+    <%= render partial: 'events/event_sort_controls' %>
+  </div>
+</div>
+<div class="row event-list">
+  <% events.each do |event| %>
+    <%= render partial: 'events/event_tile', locals: { event: event } %>
+  <% end %>
+</div>

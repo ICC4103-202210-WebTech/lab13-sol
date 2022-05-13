@@ -22,33 +22,36 @@
         <%= form.label :flyer %>
         <%= form.file_field :flyer, class: "form-control-file" %>
       </div>      
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title"><%= ticket_type_section_title %></h5>
-          <p><%= ticket_type_instruction_text %></p>
-            <%=form.fields_for :ticket_types do |ticket_types_form| %>
-              <div class="mb-3">
-                <%= ticket_types_form.label :name, class: "form-label" %>
-                <%= ticket_types_form.text_field :name, class: "form-control" %>
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title"><%= ticket_type_section_title %></h5>
+        <p><%= ticket_type_instruction_text %></p>
+        <div id="ticket_types_add_form">
+          <%=form.fields_for :ticket_types do |ticket_types_form| %>
+            <div class="mb-3">
+              <%= ticket_types_form.label :name, class: "form-label" %>
+              <%= ticket_types_form.text_field :name, class: "form-control" %>
+            </div>
+            <div class="mb-3">
+              <%= ticket_types_form.label :price, class: "form-label" %>
+              <%= ticket_types_form.text_field :price, class: "form-control" %>
+              <% if action_name == 'edit' %>
+              <div class="form-check mt-2">
+                <%= ticket_types_form.check_box :_destroy, class: "form-check-input" %>
+                <%= ticket_types_form.label "Delete", class: "form-check-label" %>
               </div>
-              <div class="mb-3">
-                <%= ticket_types_form.label :price, class: "form-label" %>
-                <%= ticket_types_form.text_field :price, class: "form-control" %>
-                <% if action_name == 'edit' %>
-                <div class="form-check mt-2">
-                  <%= ticket_types_form.check_box :_destroy, class: "form-check-input" %>
-                  <%= ticket_types_form.label "Delete", class: "form-check-label" %>
-                </div>
-                <% end %>
-                <hr>
-              </div>
-            <% end %>
+              <% end %>
+              <hr>
+            </div>
+          <% end %>
+          <%= link_to "Add Ticket Type", "#",
+                      id: 'btn_add_ticket_type', class: [ 'btn', 'btn-primary'] %>    
         </div>
       </div>
-      <div class="mt-2">
-        <%= form.submit submit_btn_text, class: ["btn", "btn-primary"] %>
-        <%= link_to "Back", :back, class: ["btn", "btn-secondary"] %>
-      </div>
-    <% end %>
-  </div>
+    </div>
+    <div class="form-group mt-2">
+      <%= form.submit submit_btn_text, class: ["btn", "btn-primary"] %>
+      <%= link_to "Back", :back, class: ["btn", "btn-secondary"] %>
+    </div>
+  <% end %>
 </div>
