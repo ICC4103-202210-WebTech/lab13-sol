@@ -1,4 +1,4 @@
-# Starter code for Lab Assignment #10
+# Solution to Lab Assignment #10
 
 ## Introduction
 
@@ -10,7 +10,7 @@ You may continue to work in pairs.
 
 To get started, you will need to be familiar with the following topics covered in slide decks 9 and 10:
 
-1. The HTML DOM, and its APIs, such as events, and traversal (e.g. `querySelector`, `querySelectorAll`, etc.).
+1. The HTML DOM, and its APIs, such as events, and traversal (e.g. `querySelector`, `querySelectorAll`, etc.). Also, you will need to use methods such as `Element.closest()` and `Element.remove()`.
 2. The basics of ECMAScript (ES6), including function expressions, IIFEs, the console.
 3. Data attributes in HTML 5. For this, you can see the first few slides of class 10, wherein this is explained.
 
@@ -26,7 +26,7 @@ To get started, you will need to be familiar with the following topics covered i
 
 1. [1.0 points] Edit the partial `app/views/events/_event_tile.html.erb`, so that the first (i.e., topmost) `<div>` element contains two data attributes. The first data attribute must be called `data-event-name` and its value must be the event name. The second data attribute must be called `data-start-date`, and its value must be, of course, the event start date.
 2. [2.0 points] Go to `app/javascript/custom/events.js` and complete the code according to the requirements of GOAL (1) in the code comments.  Note that the function `registerClickHandlerForSortButton` permits configuring the sort buttons passing a comparison function. Two comparison functions are available; `cmpFnStartDate` (compares start date) and `cmpFnEventName` (compares event name). Test your code by clicking on the buttons that allow ordering events in the application homepage and `events#index` views. Watch the browser console for any errors. Use the `console` object to print out your debug comments.
-4. [3.0 points] Complete the code in `app/javascript/packs/events.js` according to GOAL (2) in the code comments. You should look for all buttons with class `remove-ticket-type-btn-otf` and add a click event handler to them. The event handler should look for the closest ancestor `div` element with class `remove-ticket-type-btn-otf` and [remove it from the DOM](https://developer.mozilla.org/en-US/docs/Web/API/Element/remove)
+4. [3.0 points] Complete the code in `app/javascript/packs/events.js` according to GOAL (2) in the code comments. You should look for a newly added delete button on the page and add a click event handler to it. The event handler should look for the closest ancestor `div` element with class `remove-ticket-type-btn-otf` and [remove it from the DOM](https://developer.mozilla.org/en-US/docs/Web/API/Element/remove).
 
 ## Grading
 
@@ -93,6 +93,8 @@ rails db:setup
 
 The following links to Rails Guides will provide you useful information for completing your assignment:
 
+* [Document Object Model](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model)
+* [The HTML DOM API](https://developer.mozilla.org/en-US/docs/Web/API/HTML_DOM_API)
 * [HTML 5 basics (W3Schools)](https://www.w3schools.com/html/html_basic.asp)
 * [Layouts and Rendering in Rails](https://edgeguides.rubyonrails.org/layouts_and_rendering.html)
 * [Action View Helpers](https://edgeguides.rubyonrails.org/form_helpers.html) 
