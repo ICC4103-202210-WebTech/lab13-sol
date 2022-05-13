@@ -14,6 +14,26 @@ To get started, you will need to be familiar with the following topics covered i
 2. The basics of ECMAScript (ES6), including function expressions, IIFEs, the console.
 3. Data attributes in HTML 5. For this, you can see the first few slides of class 10, wherein this is explained.
 
+## Run the First Steps as Usual
+
+If you use RVM then the correct version of ruby and gemset will be chosen automatically for you (`3.1.1@webtech`)
+whenever you switch to the project directory on the terminal. If you need to choose this manually, then run
+
+```sh
+$rvm use 3@webtech
+```
+
+Install any missing gems and setup de database:
+
+```sh
+bundle install # new gems have been added to the Gemfile
+rails db:setup
+rails db:populate_fake_data # This will generate fake events, customers, etc.
+rails s # Run the application with an application server
+```
+
+Note that the last command will launch an application server that will allow accessing your application from either a web browser (at [http://localhost:3000](http://localhost:3000)).
+
 ## Non-graded Steps
 
 1. Inspect the partial views in `app/views/events`. The display of events has been reorganized into different partial views. The `_event_list` partial contains events being displayed. It is composed of the `_event_sort_controls` partial and the `_event_tile` partial. The former contains buttons that will permit the user ordering events by name, or by start date, in ascending order.
