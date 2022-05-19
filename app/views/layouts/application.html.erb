@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Lab 10</title>
+    <title>Lab 11</title>
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
@@ -26,6 +26,10 @@
                 <%= link_to "Orders", customer_orders_path, class: "nav-link" %>
               </li>
             </ul>
+            <form class="d-flex" style="margin-right: 1em" role="search">
+              <input class="form-control me-2" id="search_box" type="search" placeholder="Search" aria-label="Search">
+              <button class="btn btn-outline-success" id="search_button" type="submit">Search</button>
+            </form>
             <span class="d-inline card p-1 shopping_cart" style="background:#efefef;">
               <%= content_tag :a, { href: shopping_cart_path } do %> <%=image_tag("cart.svg", width: "24em") %> 
               <span class="badge badge-danger" style="color:black;">
@@ -69,7 +73,7 @@
   <footer class="container-fluid text-muted">
     <div class="row mt-4">
       <p>
-        WebTech Lab 10 Solution Code is distributed under the
+        WebTech Lab 11 Solution Code is distributed under the
         <a href="https://opensource.org/licenses/MIT">MIT license.</a><br />
          New to Bootstrap?
         <a href="http://getbootstrap.com/">Visit the homepage</a> or read our

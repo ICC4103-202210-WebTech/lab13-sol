@@ -1,0 +1,13 @@
+<div class="row ml-0 mt-3">
+  <h2>Search Results</h2>
+</div>
+<% if @events.length > 0  %>
+  <div class="row ml-0 mt-2">
+    <p><%=@events.length %> matches found.</p>
+  </div>
+  <%=render partial: "events/event_list", locals: { events: @events } %>
+<% else %>
+  <div class="row ml-0 mt-2">
+    <p>No matches found.</p>
+  </div>
+<% end %>

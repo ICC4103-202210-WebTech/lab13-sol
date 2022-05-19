@@ -1,22 +1,29 @@
-(() => {
-    // The following functions use the object destructuring technique
-    // introduced by ES6 for function parameters.
-    // See here: https://simonsmith.io/destructuring-objects-as-function-parameters-in-es6
-    let cmpFnStartDate = ({ dataset: { startDate: a } }, { dataset: { startDate: b } }) => a.localeCompare(b);
-    let cmpFnEventName = ({ dataset: { eventName: a } }, { dataset: { eventName: b } }) => a.localeCompare(b);
+export const cmpFnStartDate = ({ dataset: { startDate: a } }, { dataset: { startDate: b } }) => a.localeCompare(b);
+export const cmpFnEventName = ({ dataset: { eventName: a } }, { dataset: { eventName: b } }) => a.localeCompare(b);
 
-    // The first parameter is a button object, the second parameter is the
-    // data attribute (i.e., start-date or event-name) by which events should be sorted,
-    // compareFn is a function that permits comparing dates or event names (i.e., see the
-    // two functions defined above...).
-    let registerClickHandlerForSortButton = (btn, dataAtt, compareFn) => {
-        btn.addEventListener('click', ev => {
-            Array.from(document.querySelectorAll(`div.event-list > div[data-${dataAtt}]`))
-                .sort(compareFn)
-                .forEach((item) => item.parentNode.appendChild(item));
+export const registerClickHandlerForSortButton = (btn, dataAtt, compareFn) => {
+    btn.addEventListener('click', ev => {
+        Array.from(document.querySelectorAll(`div.event-list > div[data-${dataAtt}]`))
+            .sort(compareFn)
+            .forEach((item) => item.parentNode.appendChild(item));
+    });
+}
+
+export const initSortButtons = () => {
+    let event_lst = document.querySelector('div.event-list');
+    if (event_lst) {
+        document.querySelectorAll(".btn-sort-date").forEach((element) => {
+            registerClickHandlerForSortButton(
+                element, 'start-date', cmpFnStartDate);
+        });
+        document.querySelectorAll(".btn-sort-name").forEach((element) => {
+            registerClickHandlerForSortButton(
+                element, 'event-name', cmpFnEventName);
         });
     }
+}
 
+(() => {
     // Called when the plus button is clicked on the Event-TicketType new/edit subform.
     let add_ticket_type_form = (div_id) => {
         let timestamp = (new Date()).getTime();

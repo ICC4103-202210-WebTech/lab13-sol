@@ -11,3 +11,4 @@ import "@fortawesome/fontawesome-free"
 library.add(far, fas, fab)
 
 import "custom/events"
+import "custom/search"
