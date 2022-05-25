@@ -22,14 +22,17 @@
               <li class="nav-item">
                 <%= link_to "Events", events_path, class: "nav-link" %>
               </li>
+              <!-- TODO: Orders must only be visible to logged-in customers -->
               <li class="nav-item">
                 <%= link_to "Orders", customer_orders_path, class: "nav-link" %>
               </li>
+              <!-- END TODO -->
             </ul>
             <form class="d-flex" style="margin-right: 1em" role="search">
               <input class="form-control me-2" id="search_box" type="search" placeholder="Search" aria-label="Search">
               <button class="btn btn-outline-success" id="search_button" type="submit">Search</button>
             </form>
+            <!-- TODO: the shopping cart must only be visible to signed-in customers -->
             <span class="d-inline card p-1 shopping_cart" style="background:#efefef;">
               <%= content_tag :a, { href: shopping_cart_path } do %> <%=image_tag("cart.svg", width: "24em") %> 
               <span class="badge badge-danger" style="color:black;">
@@ -40,7 +43,19 @@
               <% end %>
               </span>
             <% end %>
-          </span>
+            </span>
+            <!-- END TODO -->
+            
+            <span class="d-inline ml-3">
+            <!-- TODO: you must complete the navbar to include sign in and sign out links
+                for customers. For admin users, you should only provide a sign out link
+                if the admin user has signed in. If there is no user signed in, you must
+                show sign in (log in) and sign up (register) links. -->
+
+              <!-- This link is a place holder for the actual links you need to add here -->
+              <%= link_to "Sign In", root_path %>
+              <!-- END TODO -->
+            </span>          
         </div>
       </div>
     </nav>

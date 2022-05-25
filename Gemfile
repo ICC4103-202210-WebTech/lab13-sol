@@ -57,6 +57,10 @@ gem 'bootstrap', '~> 5.1.3'
 # Pagy for fancy table pagination
 gem 'pagy', '~> 5.10', '>= 5.10.1'
 
+gem 'devise', '~> 4.8.1'
+
+gem 'cancancan', '~> 3.3.0'
+
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 gem "image_processing", "~> 1.2"
 

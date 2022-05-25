@@ -90,18 +90,19 @@ class ShoppingCartController < ApplicationController
 
   private
 
-  # This will serialize the current cart state
-  # and store it in the cookie
   def update_cart(items)
-    cookies[:shopping_cart] = JSON.generate(items)
+    cookies[shopping_cart_cookie] = JSON.generate(items)
   end
 
-  # This will de-serialize the current cart state
-  # from the cookie store and return it
+  def shopping_cart_cookie
+    cart_name = "#{current_user.email}_shopping_cart"
+    return cart_name
+  end
+
   def get_cart_items
     cart = {}
-    if cookies.has_key?(:shopping_cart)
-      cart = JSON.parse(cookies[:shopping_cart])
+    if cookies.has_key?(shopping_cart_cookie)
+      cart = JSON.parse(cookies[shopping_cart_cookie])
     else
       update_cart({})
     end

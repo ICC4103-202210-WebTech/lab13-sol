@@ -1,19 +1,18 @@
-# Solution to Lab Assignment #11
+# Starter code for Lab Assignment #12
 
 ## Introduction
 
-In this lab assignment, you will continue to add some features to the Ticket Shop, requiring DOM manipulation and asynchronous (ajax) calls to you application. Specifically, you will add an asynchronous delete feature to the list of orders, and an event search interface.
+In this lab assignment you will enable access control and authentication in the Ticket Shop application. The starter code you are provided with already contains [Devise](https://github.com/heartcombo/devise) and [Cancancan](https://github.com/CanCanCommunity/cancancan) gems installed and partially configured.
 
 You may continue to work in pairs.
 
 ## Pre-requisites
 
-To get started, you will need to be familiar with the following topics covered in slide decks 9 and 10:
-
-1. The HTML DOM, and its APIs, such as events, and traversal.
-2. The basics of ECMAScript (ES6), including function expressions, IIFEs, the console.
-3. Data attributes in HTML 5. For this, you can see the first few slides of class 10, wherein this is explained.
-4. The Fetch API for asynchronous calls to your application. 
+* It is highly recommendable that you skim through [Devise's](https://github.com/heartcombo/devise)
+and [Cancancan's](https://github.com/CanCanCommunity/cancancan) 'Getting Started'
+guides, as these will walk you through the basics of both gems.
+* Follow the non-graded steps carefully so that you understand how the application works in its
+initial state.
 
 ## Run the First Steps as Usual
 
@@ -37,21 +36,23 @@ Note that the last command will launch an application server that will allow acc
 
 ## Non-graded Steps
 
-1. Take a look at the solution of lab 10, available in this starter code for lab 11. See how the event handler is defined for each of the sort buttons in `app/javascripts/custom/events.js`.
-2. Also, take a look at `app/javascripts/custom/events.js`, wherein an event listener is attached to each delete button that is dynamically created and injected into the DOM whenever new form fields for an additional `TicketType` resource are created.
-3. See the application layout at `app/views/layouts/application.html.erb`. Notice how a search box and a button have been added to the topbar to enable search. See what the ids of these elements are.
-4. See that there is a layout and a view template that are intended for search functionality. The former is at `app/views/layouts/search.html.erb`. It is an extremely minimalistic layout that simply outputs contents of the search template at `app/views/search/search.html.rb`. The latter will render events in search results.
-5. See `app/controllers/search_controller.rb`. This controller inherits from `ApplicationController` and has just one `search` action callable with POST or GET methods (see `config/routes.rb`). The `search` action will perform actual search of events, by event name or description. The `search` action will render the search HTML-ERB template with the layout described in (4). 
-6. See `app/javascript/custom/search.js`. In this file, you will implement a call to the remote application endpoint that implements search, by using the standard Fetch API.
+1. Have a look at the application layout at `app/views/layouts/application.html.erb`, and follow theHTML comments that start with 'TODO', as this are (graded) steps you are expected to complete.
+2. Take a look at the following event-related views: `app/views/events/{index.html.erb,show.html.erb,_event_tile.html.erb}` You will also see TODO comments explaining what you are expected to complete.
+3. Go to `app/controllers/application_controller.rb` and see the method `current_user`. Per each model to which Devise is added, Devise dynamically enables several methods matching the respective model names, such as `current_admin`, and `current_customer`, as `Customer` and `Admin` are both models that are available in the TicketShop application. Have look at the `Customer` and `Admin` models in order to see how Devise injects its own logic. Also, you may see the latest migrations created by Devise automatically in the `db/migrate` directory. In order to operate with CanCanCan, it is necessary to provide a `current_user` method that returns the model matching the current user, which is why such method is implemented in the `ApplicationController` class.
+4. Go to `app/controllers/orders_controller.rb`. See that Cancancan implements the `load_and_authorize_resource` method that prevents a user from accessing orders placed by other users. However, this controller is incomplete, as it still requires that a user is authenticated before they can see their orders. You need to investigate how Devise can provide this functionality through a filter, so that before controller actions are executed, the user is signed in. The solution to this is a one liner.
+5. Inspect the file `app/models/ability.rb`. This is CanCanCan's central configuration file in the TicketShop, which defines how resources are accessed by different kinds of users. You are required to complete the `initialize` method in the `Ability` class, so that access to resources is properly controlled per each kind of user.
+6. Inspect `app/controllers/shopping_cart_controller.rb` and see how the shopping cart cookie is saved depending on who the logged-in user is. To allow many users to share the same web browser and each have their own shopping cart, the trick is to prepend the user's email address to the name of the cookie.  
+7. Run the `rake routes` task and see the many routes that are enabled by Devise for `User` and `Admin` resources. You may also want to check out the `config/routes.rb` file in order to see how Devise has been configured for both models.
+8. The sign-in page for administrators is accessible through the `admins/sign_in` path. You may sign in with the admin user `admin@ticketshop.com`, bt entering the password you set running the `rake admin:create_admin_user` task.
+9. The sign-in route for customers is `customers/sign_in`. Use the rails console to see what (fake) users are available. You may use any of them to sign in as a customer, with password `123123123`.
+9. Finally, you may want to check out the task at `lib/tasks/create_admin_user.rake`. It is a good practice to create a rake task that allows creating the admin user, instead of simply creating the user in the seeds file and carelessly exposing the default password in your sources' repository.
 
-## Let's roll
+## Graded Steps
 
-1. [1.0 point] Go to `app/views/orders/index.html.erb` and add a rightmost column to the table displaying the orders. For each order, display a delete button (use Bootstrap `btn` `btn-danger` button classes). 
-2. [1.0 point] When a delete button is pressed, a confirmation dialog must be presented to the user. If the user cancels, nothing happens. If the user accepts, the target order must be deleted asynchronously. Implement this as explained in section 5.2 of [this guide](https://edgeguides.rubyonrails.org/working_with_javascript_in_rails.html#confirmations).
-3. [1.5 point] Complete the `app/javascript/search.js` script, so that the search button handler triggers a `fetch()` call to your application requesting search results using whatever text is in the search box as search parameter. 
-4. [0.5 point] When the search button is pressed, the `main-content` `main` element of the page must be hidden. For this, set the property `style.display` to `"none"`.
-5. [1.0 point] The results generated by `SearchController#search` are rendered as HTML by Rails. Take the result obtained from the call to `fetch()`, create a new `main` element, set its `innerHTML` property to the result obtained by `fetch()`. See [this example](https://developer.mozilla.org/en-US/docs/Web/API/Body/text) to understand how to work with the text that is obtained by `fetch()`. 
-6. [1.0 point] If the search box is cleared, the `main` element with search results must be destroyed (removed from the DOM), and the original `main` element must have its `style.display` property restored to `"block"` in order to be visible again.
+1. [1.5 points] Complete the layout of the application, so that behavior of sign-in, sign-out, sign-up links works properly. Also, the shopping cart must only be visible to signed-in customers. Non-registered users must only be able to see events.
+2. [2.0 points] Complete the Event view files described above, so that access control is possible. Only the admin user should be able to create/edit `Event` and `TicketType` resources. On the other hand, only customers should be able to purchase tickets. Also, non-registered users must see a link to the customer sign-in page when the list of available ticket types appears in the table listing them.
+3. [.5 points] Enable Devise's filter at `app/controllers/orders_controller.rb` requiring the customer to log in before accessing any actions provided by that controller.
+4. [2.0 points] Complete `app/models/ability.rb` so that CanCanCan properly enforces access control to resources.
 
 With the above steps, your TicketShop will permit the user searching for events, and deleting orders. 
 
@@ -120,6 +121,9 @@ rails db:setup
 
 The following links to Rails Guides will provide you useful information for completing your assignment:
 
+* [Cancancan](https://github.com/CanCanCommunity/cancancan)
+* [Devise](https://github.com/heartcombo/devise)
+* [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
 * [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
 * [Document Object Model](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model)
 * [The HTML DOM API](https://developer.mozilla.org/en-US/docs/Web/API/HTML_DOM_API)
