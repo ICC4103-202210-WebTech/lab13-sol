@@ -14,7 +14,7 @@ guides, as these will walk you through the basics of both gems.
 * Follow the non-graded steps carefully so that you understand how the application works in its
 initial state.
 
-## Run the First Steps as Usual
+## Run the First Steps (pay attention, there are new steps)
 
 If you use RVM then the correct version of ruby and gemset will be chosen automatically for you (`3.1.1@webtech`)
 whenever you switch to the project directory on the terminal. If you need to choose this manually, then run
