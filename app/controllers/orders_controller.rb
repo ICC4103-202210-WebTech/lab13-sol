@@ -1,4 +1,5 @@
 class OrdersController < ApplicationController
+  before_action :authenticate_customer!
   before_action :set_order, only: %i[ show edit update destroy ]
   load_and_authorize_resource
 

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Lab 11</title>
+    <title>Lab 12</title>
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
@@ -22,17 +22,19 @@
               <li class="nav-item">
                 <%= link_to "Events", events_path, class: "nav-link" %>
               </li>
-              <!-- TODO: Orders must only be visible to logged-in customers -->
+              <!-- Orders must only be visible to logged-in customers -->
+              <% if customer_signed_in? %>
               <li class="nav-item">
                 <%= link_to "Orders", customer_orders_path, class: "nav-link" %>
               </li>
-              <!-- END TODO -->
+              <%end %>
             </ul>
             <form class="d-flex" style="margin-right: 1em" role="search">
               <input class="form-control me-2" id="search_box" type="search" placeholder="Search" aria-label="Search">
               <button class="btn btn-outline-success" id="search_button" type="submit">Search</button>
             </form>
-            <!-- TODO: the shopping cart must only be visible to signed-in customers -->
+            <!-- The shopping cart must only be visible to signed-in customers -->
+            <% if customer_signed_in? %>
             <span class="d-inline card p-1 shopping_cart" style="background:#efefef;">
               <%= content_tag :a, { href: shopping_cart_path } do %> <%=image_tag("cart.svg", width: "24em") %> 
               <span class="badge badge-danger" style="color:black;">
@@ -41,20 +43,18 @@
               <% else %>
                 &nbsp;
               <% end %>
+            <% end %>
               </span>
             <% end %>
             </span>
-            <!-- END TODO -->
-            
             <span class="d-inline ml-3">
-            <!-- TODO: you must complete the navbar to include sign in and sign out links
-                for customers. For admin users, you should only provide a sign out link
-                if the admin user has signed in. If there is no user signed in, you must
-                show sign in (log in) and sign up (register) links. -->
-
-              <!-- This link is a place holder for the actual links you need to add here -->
-              <%= link_to "Sign In", root_path %>
-              <!-- END TODO -->
+              <% if admin_signed_in? %>
+              <%=link_to "Sign out", destroy_admin_session_path, data: { turbo_method: :delete } %>
+              <% elsif !customer_signed_in? %>
+              <%=link_to "Sign in", new_customer_session_path %> | <%=link_to "Sign up", new_customer_registration_path %>
+              <% elsif customer_signed_in? %>
+              <%=link_to "Sign out", destroy_customer_session_path, data: { turbo_method: :delete } %>
+              <% end %>
             </span>          
         </div>
       </div>
@@ -88,7 +88,7 @@
   <footer class="container-fluid text-muted">
     <div class="row mt-4">
       <p>
-        WebTech Lab 11 Solution Code is distributed under the
+        WebTech Lab 12 Solution Code is distributed under the
         <a href="https://opensource.org/licenses/MIT">MIT license.</a><br />
          New to Bootstrap?
         <a href="http://getbootstrap.com/">Visit the homepage</a> or read our

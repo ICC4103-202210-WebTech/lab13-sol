@@ -1,5 +1,7 @@
-<div class="card mt-4">
+<% if customer_signed_in? %>
+  <div class="card mt-4">
   <div class="card-body">
-    Welcome, <%= customer.first_name %>
+      Welcome, <%= current_customer.first_name %>
   </div>
 </div>
+<% end %>

@@ -22,17 +22,13 @@
         </li>
     </ul>
 </div>
-<!-- TODO: only admin users should be able to add ticket types or edit the event -->
+<% if admin_signed_in? %>
 <div class="row ml-0 mt-2 mb-3">
-    <div class="col-2">
-        <%= link_to "Add Ticket Type", new_event_ticket_type_path(@event), class: ["btn", "btn-primary"] %>
-            &nbsp;
-    </div>
-    <div class="col-2">
-        <%= link_to "Edit Event", edit_event_path, class: ["btn", "btn-primary"] %>
-    </div>
+  <%= link_to "Add Ticket Type", new_event_ticket_type_path(@event), class: ["btn", "btn-primary"] %>
+  &nbsp;
+  <%= link_to "Edit Event", edit_event_path, class: ["btn", "btn-primary"] %>
 </div>
-<!-- End TODO -->
+<% end %>
 <div class="row ml-0 mt-3">
     <p><strong>Ticket Types:</strong></p>
     <table class="table">
@@ -44,7 +40,7 @@
             </tr>
         </thead>
         <tbody>
-            <% @event.ticket_types.each do |ticket_type| %>
+            <% @event.ticket_types.each_with_index do |ticket_type, i| %>
                 <tr>
                     <td>
                         <%= ticket_type.name %>
@@ -52,16 +48,15 @@
                     <td>
                         <%= ticket_type.price %>
                     </td>
-                    <!-- TODO if a customer has signed in, allow them to add a ticket to the cart.
-                    Admin users should not be able to add a ticket to the cart, i.e., they should not see
-                    the button.
-                    Users who are not logged in should be presented a link with text "Sign in to purchase".
-                    The link must lead the user to the sign in form. Use the new_customer_session_path
-                    for this -->                    
-                    <td>
-                        <%= button_to "Add to Cart", { controller: "shopping_cart", action: "add", ticket_type_id: ticket_type.id }, method: :post, class: ["btn", "btn-primary"] %>
-                    </td>
-                    <!-- end TODO -->                    
+                    <% if customer_signed_in? %>
+                    <td><%= link_to "Add to Cart", { controller: "shopping_cart", action: "add", ticket_type_id: ticket_type.id }, method: :post, class: ["btn", "btn-primary"] %></td>
+                    <% else %>
+                    <% if i == 0 %>
+                        <td><%=link_to "Sign in to purchase", new_customer_session_path %></td>
+                    <% else %>
+                        <td>&nbsp;</td>
+                    <% end %>
+                    <% end %>                 
                 </tr>
                 <% end %>
         </tbody>
