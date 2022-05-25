@@ -1,4 +1,4 @@
-# Starter code for Lab Assignment #12
+# Solution to Lab Assignment #12
 
 ## Introduction
 
