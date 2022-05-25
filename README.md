@@ -29,6 +29,7 @@ Install any missing gems and setup de database:
 bundle install # new gems have been added to the Gemfile
 rails db:setup
 rails db:populate_fake_data # This will generate fake events, customers, etc.
+rails admin:create_admin_user # This will create admin user with email admin@ticketshop.com, and with the password you enter\
 rails s # Run the application with an application server
 ```
 
@@ -43,7 +44,7 @@ Note that the last command will launch an application server that will allow acc
 5. Inspect the file `app/models/ability.rb`. This is CanCanCan's central configuration file in the TicketShop, which defines how resources are accessed by different kinds of users. You are required to complete the `initialize` method in the `Ability` class, so that access to resources is properly controlled per each kind of user.
 6. Inspect `app/controllers/shopping_cart_controller.rb` and see how the shopping cart cookie is saved depending on who the logged-in user is. To allow many users to share the same web browser and each have their own shopping cart, the trick is to prepend the user's email address to the name of the cookie.  
 7. Run the `rake routes` task and see the many routes that are enabled by Devise for `User` and `Admin` resources. You may also want to check out the `config/routes.rb` file in order to see how Devise has been configured for both models.
-8. The sign-in page for administrators is accessible through the `admins/sign_in` path. You may sign in with the admin user `admin@ticketshop.com`, bt entering the password you set running the `rake admin:create_admin_user` task.
+8. The sign-in page for administrators is accessible through the `admins/sign_in` path. You may sign in with the admin user `admin@ticketshop.com`, by entering the password you set running the `rake admin:create_admin_user` task.
 9. The sign-in route for customers is `customers/sign_in`. Use the rails console to see what (fake) users are available. You may use any of them to sign in as a customer, with password `123123123`.
 9. Finally, you may want to check out the task at `lib/tasks/create_admin_user.rake`. It is a good practice to create a rake task that allows creating the admin user, instead of simply creating the user in the seeds file and carelessly exposing the default password in your sources' repository.
 
