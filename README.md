@@ -36,7 +36,15 @@ The database used by the Ticket Shop application is run in a separate `db` conta
 
 ### Rails' configuration credentials
 
-Before Docker images are built, it is necessary to set up an encrypted configuration file for the Ticket Shop application. That is, we do not want hackers to get their hands on a configuration file in plain text in a production server. For this, a master key to encrypt the configuration is needed. These steps are well described in the [Rails Guides](https://edgeguides.rubyonrails.org/security.html#custom-credentials). Basically, you will need to execute the following from the `RAILS_ROOT` directory:
+Before Docker images are built, it is necessary to set up an encrypted configuration file for the Ticket Shop application. That is, we do not want hackers to get their hands on a configuration file in plain text in a production server. For this, a master key to encrypt the configuration is needed. These steps are well described in the [Rails Guides](https://edgeguides.rubyonrails.org/security.html#custom-credentials). 
+
+First, delete the pre-existing encrypted configuration file (run this from the `RAILS_ROOT` directory):
+
+```sh
+$ rm config/credentials.yml.enc
+```
+
+Now, you will need to execute the following:
 
 ```sh
 $ EDITOR="code --w" bin/rails credentials:edit
