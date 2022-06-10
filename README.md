@@ -9,8 +9,13 @@ You may continue to work in pairs.
 
 ## Pre-requisites
 
-* Install [Docker Desktop](https://docs.docker.com/desktop/#download-and-install) on your host operating system (Windows+WSL2, macOS or Linux VM/host). Here are the [instructions for Debian](https://docs.docker.com/engine/install/debian/).
 * Make sure you have at least 5 GB of free disk space, as you will be building Docker images locally.
+* Install [Docker Desktop](https://docs.docker.com/desktop/#download-and-install) on your host operating system (Windows+WSL2, macOS or Linux VM/host). Here are the [instructions for Debian](https://docs.docker.com/engine/install/debian/).
+* If you run Docker on Linux (e.g. in the course VM), be sure to add the user (e.g. webtech) to the docker group after installing docker. Do it like this:
+```sh
+$ sudo usermod -aG docker $USER
+```
+* After installing Docker and doing the above, restart your virtual machine (if you run Docker in a VM) or host computer.
 
 ## A brief introduction to Docker and Docker Compose
 
