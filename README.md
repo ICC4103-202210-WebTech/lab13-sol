@@ -124,7 +124,7 @@ Answer the following questions below:
 2. [.5 point] What is a Docker image?
 3. [.5 point] What is a Docker container?
 4. [1 point] What is the role of Docker Compose?
-5. [3 points] Take a screenshot of your entire desktop showing: Docker Desktop running (1 point), the terminal window showing the containers of the Ticket Shop application running (`docker-compose up`; 1 point), and a web browser connected to http://localhost:8080 showing the application running (1 point). Put the screenshots in the `docs/imgs` folder. **Do not hand in separate screenshots. Make it a single screenshot image.**
+5. [3 points] Take a screenshot of your entire desktop showing: Docker Desktop running (1 point), the terminal window showing the containers of the Ticket Shop application running (`docker-compose up`; 1 point), and a web browser connected to http://localhost:8080 showing the application running (1 point). Put the screenshot in the `docs/imgs` folder. **Do not hand in separate screenshots. Make it a single screenshot image.**
 
 ## Useful links
 
