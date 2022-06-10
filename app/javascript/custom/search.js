@@ -1,5 +1,5 @@
 // Import functions required to enable event sort buttons in search results
-import { initSortButtons } from './events.js'
+import { initSortButtons } from 'custom/events';
 
 (() => {
     document.addEventListener("turbo:load", () => {
