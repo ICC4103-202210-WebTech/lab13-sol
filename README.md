@@ -1,143 +1,125 @@
-# Solution to Lab Assignment #12
+# Starter code for Lab Assignment #13
+**Names:** (write your names here)
 
 ## Introduction
 
-In this lab assignment you will enable access control and authentication in the Ticket Shop application. The starter code you are provided with already contains [Devise](https://github.com/heartcombo/devise) and [Cancancan](https://github.com/CanCanCommunity/cancancan) gems installed and partially configured.
+In this lab assignment you will see how a Rails application can be run in production mode by means of a Docker container running on your local machine. You will be shown how DockerFiles are created, how a service composition is accomplished by means of Docker Compose, including a PostgreSQL database, a reverse proxy with nginx and the Ticket Shop rails application. You will see how Docker images are built based on DockerFiles. Lastly, you will be able to use the Ticket Shop application in production mode.
 
 You may continue to work in pairs.
 
 ## Pre-requisites
 
-* It is highly recommendable that you skim through [Devise's](https://github.com/heartcombo/devise)
-and [Cancancan's](https://github.com/CanCanCommunity/cancancan) 'Getting Started'
-guides, as these will walk you through the basics of both gems.
-* Follow the non-graded steps carefully so that you understand how the application works in its
-initial state.
+* Install [Docker Desktop](https://docs.docker.com/desktop/#download-and-install) on your host operating system (Windows+WSL2, macOS or Linux VM/host). Here are the [instructions for Debian](https://docs.docker.com/engine/install/debian/).
+* Make sure you have at least 5 GB of free disk space, as you will be building Docker images locally.
 
-## Run the First Steps (pay attention, there are new steps)
+## A brief introduction to Docker and Docker Compose
 
-If you use RVM then the correct version of ruby and gemset will be chosen automatically for you (`3.1.1@webtech`)
-whenever you switch to the project directory on the terminal. If you need to choose this manually, then run
+[Docker Desktop](https://docs.docker.com/desktop/) is an easy-to-install application for your Mac or Windows environment that enables you to build and share [containerized applications](https://www.freecodecamp.org/news/a-beginner-friendly-introduction-to-containers-vms-and-docker-79a9e3e119b/). Docker Desktop includes several applications and services, including [Docker Engine](https://docs.docker.com/engine/), Docker CLI client, Docker Compose, Docker Content Trust, Kubernetes, and Credential Helper.
 
-```sh
-$rvm use 3@webtech
-```
+After you’ve successfully installed and started Docker Desktop, is is recommended that you authenticate using the Sign in/Create ID option from the Docker menu. Authenticated users get a higher pull rate (i.e., ability to download images) limit compared to anonymous users. For example, if you are authenticated, you get 200 pulls per 6 hour period, compared to 100 pulls per 6 hour period per IP address for anonymous users. For more information, see Download rate limit.
 
-Install any missing gems and setup de database:
+[Docker Compose](https://docs.docker.com/compose/) is a tool for defining and running multi-container Docker applications. With Compose, you use a YAML file (i.e., `docker-compose.yml`) to configure your application’s services. Then, with a single command, you create and start all the services from your configuration. To learn more about all the features of Compose, see the list of features.
 
-```sh
-bundle install # new gems have been added to the Gemfile
-rails db:setup
-rails db:populate_fake_data # This will generate fake events, customers, etc.
-rails admin:create_admin_user # This will create admin user with email admin@ticketshop.com, and with the password you enter\
-rails s # Run the application with an application server
-```
+With Docker and Docker Compose, you may easily set up a complex web application deployment, comprising several services, as we will see in the following section.
 
-Note that the last command will launch an application server that will allow accessing your application from either a web browser (at [http://localhost:3000](http://localhost:3000)).
+## Running the Ticket Shop in production mode
 
-## Non-graded Steps
+The figure below shows the architecture of the current Ticket Shop application deployment in production mode. Operation of the application is based on three containers. Firstly, there is a container running the nginx web server (i.e., '`web`' container). This web server serves static assets that belong to the application, and forwards requests to the Puma application server that runs in the '`app`' container.
 
-1. Have a look at the application layout at `app/views/layouts/application.html.erb`, and follow theHTML comments that start with 'TODO', as this are (graded) steps you are expected to complete.
-2. Take a look at the following event-related views: `app/views/events/{index.html.erb,show.html.erb,_event_tile.html.erb}` You will also see TODO comments explaining what you are expected to complete.
-3. Go to `app/controllers/application_controller.rb` and see the method `current_user`. Per each model to which Devise is added, Devise dynamically enables several methods matching the respective model names, such as `current_admin`, and `current_customer`, as `Customer` and `Admin` are both models that are available in the TicketShop application. Have look at the `Customer` and `Admin` models in order to see how Devise injects its own logic. Also, you may see the latest migrations created by Devise automatically in the `db/migrate` directory. In order to operate with CanCanCan, it is necessary to provide a `current_user` method that returns the model matching the current user, which is why such method is implemented in the `ApplicationController` class.
-4. Go to `app/controllers/orders_controller.rb`. See that Cancancan implements the `load_and_authorize_resource` method that prevents a user from accessing orders placed by other users. However, this controller is incomplete, as it still requires that a user is authenticated before they can see their orders. You need to investigate how Devise can provide this functionality through a filter, so that before controller actions are executed, the user is signed in. The solution to this is a one liner.
-5. Inspect the file `app/models/ability.rb`. This is CanCanCan's central configuration file in the TicketShop, which defines how resources are accessed by different kinds of users. You are required to complete the `initialize` method in the `Ability` class, so that access to resources is properly controlled per each kind of user.
-6. Inspect `app/controllers/shopping_cart_controller.rb` and see how the shopping cart cookie is saved depending on who the logged-in user is. To allow many users to share the same web browser and each have their own shopping cart, the trick is to prepend the user's email address to the name of the cookie.  
-7. Run the `rake routes` task and see the many routes that are enabled by Devise for `User` and `Admin` resources. You may also want to check out the `config/routes.rb` file in order to see how Devise has been configured for both models.
-8. The sign-in page for administrators is accessible through the `admins/sign_in` path. You may sign in with the admin user `admin@ticketshop.com`, by entering the password you set running the `rake admin:create_admin_user` task.
-9. The sign-in route for customers is `customers/sign_in`. Use the rails console to see what (fake) users are available. You may use any of them to sign in as a customer, with password `123123123`.
-9. Finally, you may want to check out the task at `lib/tasks/create_admin_user.rake`. It is a good practice to create a rake task that allows creating the admin user, instead of simply creating the user in the seeds file and carelessly exposing the default password in your sources' repository.
+The '`web`' and '`app`' containers share a storage volume called '`asset-data`'. The rails application precompiles its assets with sprockets and leaves the corresponding static files in the '`asset-data`' volume. The nginx web server accesses the volume each time a request from the web browser starts with `/assets/` on its path.
 
-## Graded Steps
+![Architecture of Ticket Shop in production](docs/imgs/architecture.png "Architecture")
 
-1. [1.5 points] Complete the layout of the application, so that behavior of sign-in, sign-out, sign-up links works properly. Also, the shopping cart must only be visible to signed-in customers. Non-registered users must only be able to see events.
-2. [2.0 points] Complete the Event view files described above, so that access control is possible. Only the admin user should be able to create/edit `Event` and `TicketType` resources. On the other hand, only customers should be able to purchase tickets. Also, non-registered users must see a link to the customer sign-in page when the list of available ticket types appears in the table listing them.
-3. [.5 points] Enable Devise's filter at `app/controllers/orders_controller.rb` requiring the customer to log in before accessing any actions provided by that controller.
-4. [2.0 points] Complete `app/models/ability.rb` so that CanCanCan properly enforces access control to resources.
+The database used by the Ticket Shop application is run in a separate `db` container, based on the latest PostgreSQL image. The database server and the web application require secret files containing the username and password that is to be used for database authentication. These files are kept in another special volume managed by Docker, which is called `secrets`.
 
-With the above steps, your TicketShop will permit the user searching for events, and deleting orders. 
+## Preparing the Ticket Shop application for operations in production mode
 
-## Grading
+### Rails' configuration credentials
 
-Each of the four parts of the assignment will be graded on a scale from 1 to 5. The criteria for each score is as follows:
-
-* Not implemented.
-* Some very basic implementation is attempted, or the implementation is fundamentally flawed.
-* The implementation is either incomplete, does not follow conventions or it is flawed to a considerable extent.
-* The implementation is rather complete, but there are issues.
-* The implementation is complete and correct.
-
-Then each 1-5 score will translate to 0, 0.25, 0.5, 0.75 and 1.0 weights that will multiply the maximum score possible in the corresponding part of the assignment. The weighted scores will be added up with the base point to calculate the final grade on a scale from 1 to 7.
-
-## Active Record reference
-
-We leave the following sections from previous lab assignments here, in case you need to perform operations with Active Record, for any reason.
-
-## About migrations
-
-* Migrations that you create by using the rails generator can be modified by hand. You may do so in case you misstype column names, or types. If you need to modify a migration by hand, delete the database (run `db:drop`) (see below about database tasks), and start over recreating the database (run `db:setup`).
-
-## The Rails Console
-
-Ruby on Rails provides a console on which you may run ruby code that instances the models contained in your application, and allows you to try out the associations that are implemented. Just to give you an idea about what is possible, consider the following example:
+Before Docker images are built, it is necessary to set up an encrypted configuration file for the Ticket Shop application. That is, we do not want hackers to get their hands on a configuration file in plain text in a production server. For this, a master key to encrypt the configuration is needed. These steps are well described in the [Rails Guides](https://edgeguides.rubyonrails.org/security.html#custom-credentials). Basically, you will need to execute the following from the `RAILS_ROOT` directory:
 
 ```sh
-rails c
-> Event.all # Will show all Beer models available
-> Event.first # Will show the first event record found
-> ev = EventVenue.create(name: bb, capacity: 1000) # Create an event venue
-> e = Event.create(...) # This will create an event
-> c = Customer.create(...)
+$ EDITOR="code --w" bin/rails credentials:edit
 ```
 
-To quit the console, press Ctrl+D.
-
-## Basic database tasks
-
-Rails provides several database tasks that you may run on the command line whenever needed:
-
-* `db:migrate` runs (single) migrations that have not run yet.
-* `db:create` creates the database
-* `db:drop` deletes the database
-* `db:schema:load` creates tables and columns within the (existing) database following `schema.rb`
-* `db:setup` does `db:create`, `db:schema:load`,  `db:seed`
-* `db:reset` does `db:drop`, `db:setup`
-
-Typically, you would use db:migrate after having made changes to the schema via new migration files (this makes sense only if there is already data in the database). `db:schema:load` is used when you setup a new instance of your app.
-
-After you create a migration, do not forget to apply it to the database!
+Note that the above requires VSCode installed. You may use another editor, such as VIM (provided that you know how to use it, and, ahem, how to quit):
 
 ```sh
-rails db:migrate
+$ EDITOR="vim" bin/rails credentials:edit
 ```
 
-The following example will drop the current database and then recreate it, including initialization as specified in `db/seeds.rb`:
+### Database secrets and configuration
+
+Next, you need to create files containing user name and password for the database. For this, go to the `RAILS_ROOT/secrets` directory, and therein create the following files:
+
+* `database_username.txt`: Keep the database user name in this file (which is not in source control, look at `.gitignore` and you will see there are rules about this). Make sure there is no newline character after the password.
+* `database_password.txt`: Keep the database password in this file (which is also not in source control). Make sure there is no newline character after the password.
+
+Now, take a look at the `Gemfile` and see that the `pg` gem has been added in production mode, so that ActiveRecord uses PostgreSQL as the underlying database management system. In development mode, `sqlite` has been kept as in past lab assignments.
+
+Also, go to `config/database.yml`. See that PostgreSQL configuration in production mode uses the `db_username` and `db_password` files configured in `docker-compose.yml` as secrets.
+
+### Docker configuration files
+
+Open the file `RAILS_ROOT/docker_compose.yml` to see how the `web`, `app` and `db` service containers are configured. DockerFiles in `RAILS_ROOT/docker/app/DockerFile` and `RAILS_ROOT/docker/web/DockerFile` are used to configure the images required by the Ticket Shop application, and the nginx web server. With regard to the latter, there is an `nginx.conf` file that is used to override the default configuration and be able to serve Rails' static files.
+
+## Build images and launch the Ticket Shop app
+
+To launch the containers that are required for the operation of the Ticket Shop in production mode, run the following commands:
+
+```
+$ docker-compose up --build # builds all images and launches them in containers as needed
+```
+
+You will see the output of the entire image building process per service defined in `docker-compose.yml`. After images are built, service containers are launched one by one. Dependencies among containers are specified in the YAML file (see how `app` depends on `db`, and how `web` depends on `app`). 
+
+If you have a look at `RAILS_ROOT/docker/app/DockerFile` you will see how application files are copied into the Docker image, how assets are precompiled, how the database is migrated by means of an entrypoint script (available at `lib/docker-entrypoint.sh`), and finally, how the puma web server is launched by means of a `CMD` command.
+
+Once all containers are up and running, you may connect to the application by opening http://localhost:8080 on your web browser.
+
+To stop containers, press ctrl+c on the terminal window where docker-compose runs.
+
+Here are a few useful commands options to use with `docker-compose`:
+
+```
+$ docker-compose up -d # runs containers detached from the command line
+```
+
+The above will allow you to continue to use the console after containers have been launched. 
+
+The command below will stop the containers and remove named volumes declared in the `volumes` section of the Compose file and anonymous volumes attached to containers.
+
+```
+$ docker-compose down -v 
+```
+
+### Create the Ticket Shop admin account
+
+While your containers are running, open the Docker Desktop window, go to Containers / Apps and expand the 'lab13' group. Find the '`lab13_app`' (or '`lab13_app_1`') container in the list, and click on the command prompt button (`>_`). A terminal window will open. In that window, run the following command:
 
 ```sh
-rails db:drop
-rails db:setup
-```
+$ rails admin:create_admin_account
+``` 
+
+Enter your admin password, and confirm it. Then, you may go to http://localhost:8080/admins/sign_in and enter `admin@ticketshop.com` as email, and the password you entered before to sign in as administrator.
+
+## The last (graded) steps of this lab
+
+Answer the following questions below:
+
+1. [1 point] Why is Docker useful? What problem(s) does it solve?
+2. [.5 point] What is a Docker image?
+3. [.5 point] What is a Docker container?
+4. [1 point] What is the role of Docker Compose?
+5. [3 points] Take a screenshot of your entire desktop showing: Docker Desktop running (1 point), the terminal window showing the containers of the Ticket Shop application running (`docker-compose up`; 1 point), and a web browser connected to http://localhost:8080 showing the application running (1 point). Put the screenshots in the `docs/imgs` folder. **Do not hand in separate screenshots. Make it a single screenshot image.**
 
 ## Useful links
 
 The following links to Rails Guides will provide you useful information for completing your assignment:
 
-* [Cancancan](https://github.com/CanCanCommunity/cancancan)
-* [Devise](https://github.com/heartcombo/devise)
-* [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
-* [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
-* [Document Object Model](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model)
-* [The HTML DOM API](https://developer.mozilla.org/en-US/docs/Web/API/HTML_DOM_API)
-* [HTML 5 basics (W3Schools)](https://www.w3schools.com/html/html_basic.asp)
-* [Layouts and Rendering in Rails](https://edgeguides.rubyonrails.org/layouts_and_rendering.html)
-* [Action View Helpers](https://edgeguides.rubyonrails.org/form_helpers.html) 
-* [Rails Action Controller Overview](https://edgeguides.rubyonrails.org/action_controller_overview.html) 
-* [Rails Routing from the Outside In](https://edgeguides.rubyonrails.org/routing.html)
-* [Command line](http://edgeguides.rubyonrails.org/command_line.html)
-* [Active Record Basics](http://edgeguides.rubyonrails.org/active_record_basics.html)
-* [Active Record Model](http://api.rubyonrails.org/classes/ActiveModel/Model.html)
-* [Basic Models Associations](http://edgeguides.rubyonrails.org/association_basics.html)
-* [Active Record Association Methods](http://api.rubyonrails.org/classes/ActiveRecord/Associations/ClassMethods.html)
-* [Active Record Migrations](http://edgeguides.rubyonrails.org/active_record_migrations.html)
-* [Active Record Validations](https://edgeguides.rubyonrails.org/active_record_validations.html)
-* [Active Record Query Interface](https://edgeguides.rubyonrails.org/active_record_callbacks.html)
+* [Configuring Rails Applications](https://edgeguides.rubyonrails.org/configuring.html)
+* [A Beginner-Friendly Introduction to Containers, VMs and Docker](https://www.freecodecamp.org/news/a-beginner-friendly-introduction-to-containers-vms-and-docker-79a9e3e119b/)
+* [Docker Overview](https://docs.docker.com/get-started/overview/)
+* [Get Docker](https://docs.docker.com/get-docker/)
+* [Docker Compose File Specification](https://docs.docker.com/compose/compose-file/)
+* [Dockerfile Reference](https://docs.docker.com/engine/reference/builder/)
