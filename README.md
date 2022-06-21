@@ -121,10 +121,25 @@ Enter your admin password, and confirm it. Then, you may go to http://localhost:
 Answer the following questions below:
 
 1. [1 point] Why is Docker useful? What problem(s) does it solve?
+
+Docker provides container-level virtualization to run applications and services. This is a lightweight form of virtualization, as multiple containers can run as isolated processes on the same host machine, and sharing the share operating system kernel. There is no need for hardware emulation and a hypervisor as with traditional virtual machines. Also, software distribution is greatly facilitated by use of images, which can be published in online repositories, such as DockerHub. Thus, docker is a robust solution to the problems of: (1) running applications and software elastically, efficiently and securely by means of containers, (2) facilitate software installation and configuration management by means of software images. 
+
 2. [.5 point] What is a Docker image?
+
+A Docker image may contain all necessary software and dependencies required to run a piece of software autonomously in a container. An image for a web application can be built upon a base image, for instance, containing a functional operating system (e.g. Ubuntu Server, Debian, etc.) which greatly facilitates installation of an application along with its dependencies in a production environment.
+
 3. [.5 point] What is a Docker container?
+
+A Docker container provides the computational resources (CPU, memory, network hardware, storage, etc.) needed to run a piece of software (application, daemon, script, etc.) in isolation from other processes and containers that run on the host machine.
+
 4. [1 point] What is the role of Docker Compose?
+
+Docker Compose permits running multiple Docker containers concurrently and interdependently. It can build all the images needed by the services that run on the containers, provide storage volumes, secret management, etc.
+
 5. [3 points] Take a screenshot of your entire desktop showing: Docker Desktop running (1 point), the terminal window showing the containers of the Ticket Shop application running (`docker-compose up`; 1 point), and a web browser connected to http://localhost:8080 showing the application running (1 point). Put the screenshot in the `docs/imgs` folder. **Do not hand in separate screenshots. Make it a single screenshot image.**
+
+![Ticket Shop running in production mode](docs/imgs/demo-desktop.png "Ticket Shop running in production mode")
+
 
 ## Useful links
 
